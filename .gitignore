@@ -1,0 +1,52 @@
+# ---- R ----
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# ---- Generated outputs (regenerate by running the pipeline) ----
+outputs/figures/
+!outputs/figures/.gitkeep
+
+# Tables: ignore generated tables, but keep the supply-demand coupling summary
+# shipped with the repository (it needs the accumulated GLEAM fields to rebuild).
+outputs/tables/*
+!outputs/tables/.gitkeep
+!outputs/tables/supply_demand_coupling.csv
+
+# Intermediate outputs: ignore the contents but keep the directory skeleton, so
+# the Zenodo intermediate files (see README) can be dropped straight in. The
+# *.nc / *.tif rules below keep the data files themselves out of the repository.
+outputs/intermediate/*
+!outputs/intermediate/kndvi/
+!outputs/intermediate/absmax_spearman/
+!outputs/intermediate/absmax_spearman_era5/
+!outputs/intermediate/max_spearman/
+outputs/intermediate/kndvi/*
+outputs/intermediate/absmax_spearman/*
+outputs/intermediate/absmax_spearman_era5/*
+outputs/intermediate/max_spearman/*
+!outputs/intermediate/kndvi/README.md
+!outputs/intermediate/absmax_spearman/README.md
+!outputs/intermediate/absmax_spearman_era5/README.md
+!outputs/intermediate/max_spearman/README.md
+
+# Variance-partitioning outputs: same idea (the two Zenodo varpart NetCDFs go
+# here; the FDR-adjusted files are regenerated from them).
+outputs/varpart_global/*
+!outputs/varpart_global/README.md
+
+# ---- Large binary data (download from sources / regenerate) ----
+*.nc
+*.nc4
+*.tif
+*.log
+# Exceptions: small derived files distributed with the repository
+!data/processed/aridity/ai_1982_2022_period.nc
+!data/processed/aridity/AI_1982_2022_Zomer_classes.tif
+!outputs/intermediate/vegetation_mask_c1.tif
+
+# ---- OS ----
+Thumbs.db
+desktop.ini
+.DS_Store
