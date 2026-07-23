@@ -236,6 +236,6 @@ fig <- map_grid / colorbar_centered +
 
 ggsave(out_file_tif, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
        dpi = fig_dpi, bg = "white", device = "tiff", compression = "lzw")
-ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
-       dpi = fig_dpi, bg = "white", device = cairo_pdf)
+#ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
+#       dpi = fig_dpi, bg = "white", device = cairo_pdf)
 message("Supplementary Fig. S1 (FDR) saved to:\n  ", out_file_tif, "\n  ", out_file_pdf)

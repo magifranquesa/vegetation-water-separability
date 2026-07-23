@@ -16,8 +16,8 @@
 #   outputs/tables/spatial_correlations_rho_max.csv
 #
 # Output:
-#   outputs/figures/fig2_spatial_agreement_complex_nature.tif
-#   outputs/figures/fig2_spatial_agreement_complex_nature.pdf
+#   outputs/figures/fig4_spatial_agreement.tif
+#   outputs/figures/fig4_spatial_agreement.pdf
 #
 # Dependencies: ggplot2, dplyr, readr, scico, grid
 # ==============================================================================
@@ -43,9 +43,9 @@ heatmap_csv <- if (exists("paths") && !is.null(paths$tables)) {
 }
 
 out_file_tif <- if (exists("paths") && !is.null(paths$figures)) {
-  file.path(paths$figures, "fig2_spatial_agreement_complex_nature.tif")
+  file.path(paths$figures, "fig4_spatial_agreement.tif")
 } else {
-  file.path("outputs", "figures", "fig2_spatial_agreement_complex_nature.tif")
+  file.path("outputs", "figures", "fig4_spatial_agreement.tif")
 }
 out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)
@@ -161,8 +161,8 @@ fig <- ggplot(df_corr, aes(x = Month, y = Pair, fill = rho)) +
 
 ggsave(out_file_tif, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
        dpi = fig_dpi, bg = "white", device = "tiff", compression = "lzw")
-ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
-       dpi = fig_dpi, bg = "white", device = cairo_pdf)
+#ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
+#       dpi = fig_dpi, bg = "white", device = cairo_pdf)
 
 message("Figure saved to:\n  ", out_file_tif, "\n  ", out_file_pdf)
 message("Done.")

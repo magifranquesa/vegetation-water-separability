@@ -7,13 +7,8 @@
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
 # Purpose:
-#   SIDE-BY-SIDE variant of figS_vegetated_land_aridity_maps_R_nature.R: the two
-#   panels are arranged in ONE ROW, TWO COLUMNS (a | b) instead of stacked. The
-#   ONLY differences vs the stacked script are the final composition (| instead
-#   of /, widths instead of heights), the canvas height (a single row must be
-#   much shorter or it would be mostly white), and the output file names.
-#   Everything else (data, projection, classification, colours, labels, legend,
-#   typography) is identical.
+#   Two-panel supplementary map, arranged side by side (a | b), in Equal Earth
+#   projection:
 #
 #     a) vegetated land mask used in the study
 #     b) Zomer aridity-index classes
@@ -31,8 +26,8 @@
 #   ./outputs/intermediate/vegetation_mask_c1.tif
 #
 # Outputs:
-#   ./outputs/figures/figS_vegetated_land_aridity_R_v3_sidebyside.tif
-#   ./outputs/figures/figS_vegetated_land_aridity_R_v3_sidebyside.pdf
+#   ./outputs/figures/figS4_vegetated_land_aridity.tif
+#   ./outputs/figures/figS4_vegetated_land_aridity.pdf
 #
 # Run from repo root or anywhere:
 #   Rscript 05_figures/figS4.R
@@ -73,9 +68,9 @@ file_veg_mask <- if (exists("paths") && !is.null(paths$veg_mask_c1)) {
 }
 
 out_file_tif <- if (exists("paths") && !is.null(paths$figures)) {
-  file.path(paths$figures, "figS_vegetated_land_aridity_R_v3_sidebyside.tif")
+  file.path(paths$figures, "figS4_vegetated_land_aridity.tif")
 } else {
-  file.path(project_root, "outputs", "figures", "figS_vegetated_land_aridity_R_v3_sidebyside.tif")
+  file.path(project_root, "outputs", "figures", "figS4_vegetated_land_aridity.tif")
 }
 out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)

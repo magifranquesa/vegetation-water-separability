@@ -17,9 +17,9 @@
 #      it rises with timescale, most in the semi-arid and dry sub-humid classes.
 #
 # Input (READ-ONLY; mtimes confirmed unchanged):
-#   outputs/tables/figS3_aridity_timescale_bars_stress.csv
-#   outputs/tables/figS4_aridity_timescale_bars_nonstress.csv
-#   outputs/tables/supply_demand_coupling.csv
+#   outputs/tables/timescale_bars_stress_fdr.csv       (panels a,b; from 04_analysis/09_timescale_bars.R)
+#   outputs/tables/timescale_bars_nonstress_fdr.csv    (panels a,b; from 04_analysis/09_timescale_bars.R)
+#   outputs/tables/supply_demand_coupling.csv          (panel c;   from 04_analysis/06_supply_demand_coupling.R)
 #
 # Output:
 #   outputs/figures/fig5_memory_coupling_combined_FDR.tif
@@ -92,8 +92,8 @@ aridity_labels <- c("Arid" = "Arid", "Semi-arid" = "Semi-arid",
 
 bar_max_width <- 0.28; bar_h <- 0.32; y_bar_top <- 0.48; bar_x_offset <- 0.16
 
-# panel c specifics -- aridity-class colours taken from panel b of
-# figS_vegetated_land_aridity_maps_R_nature.R for cross-figure consistency.
+# panel c specifics -- aridity-class colours taken from panel b of figS4.R
+# for cross-figure consistency.
 # (That ramp is designed for map fills; the pale mid-classes are anchored here
 #  with dark-bordered points so the lines remain legible.)
 aridity_colours <- c("Arid" = "#D9B15F", "Semi-arid" = "#F3E5B8",
@@ -306,8 +306,8 @@ fig <- row_a / bars_a_strip / legend_a / row_b / bars_b_strip / legend_b / panel
 
 ggsave(out_tif, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
        dpi = fig_dpi, bg = "white", device = "tiff", compression = "lzw")
-ggsave(out_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
-       dpi = fig_dpi, bg = "white", device = cairo_pdf)
+#ggsave(out_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
+#       dpi = fig_dpi, bg = "white", device = cairo_pdf)
 
 message("\nFigure saved to:\n  ", out_tif, "\n  ", out_pdf)
 

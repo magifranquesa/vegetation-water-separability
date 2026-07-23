@@ -16,6 +16,14 @@
 #               vs AI (fine bins, loess), with the soil->joint crossover marked.
 #               One row = panel "b"; the four columns are month strips.
 #
+# Inputs (READ-ONLY):
+#   outputs/intermediate/absmax_spearman/abs_max_correlation_kndvi_{Ep,Et,ED,SMrz,SMs}.nc
+#     (variable abs_max_correlation; panel a)
+#   outputs/varpart_global/varpart_signif_global_2blocks.nc   (total_r2; panel b)
+#   outputs/varpart_global/fdr_adjusted_pvalues.nc            (p_full/soil/demand_adj; panel b)
+#   data/processed/aridity/ai_1982_2022_period.nc             (aridity index)
+#   outputs/intermediate/vegetation_mask_c1.tif
+#
 # Output:
 #   outputs/figures/fig3_plateau_transition.tif
 #   outputs/figures/fig3_plateau_transition.pdf
@@ -140,5 +148,5 @@ fig <- top / wrap_elements(leg_ind) / bot / wrap_elements(full=xlab_g) / wrap_el
   plot_layout(heights=c(1, 0.10, 1, 0.05, 0.10)) &
   theme(plot.background=element_rect(fill="white",colour=NA))
 ggsave(out_tif,fig,width=fig_width_mm,height=fig_height_mm,units="mm",dpi=fig_dpi,bg="white",device="tiff",compression="lzw")
-ggsave(out_pdf,fig,width=fig_width_mm,height=fig_height_mm,units="mm",dpi=fig_dpi,bg="white",device=cairo_pdf)
+#ggsave(out_pdf,fig,width=fig_width_mm,height=fig_height_mm,units="mm",dpi=fig_dpi,bg="white",device=cairo_pdf)
 message("saved:\n  ", out_tif, "\n  ", out_pdf)

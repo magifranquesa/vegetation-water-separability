@@ -9,7 +9,7 @@
 #   Compute pairwise spatial Spearman correlations between ρ_max maps
 #   (one per indicator × month). The C1 vegetation mask (Et > 0 any month
 #   AND mean kNDVI > 0.025) is applied before sampling so only vegetated
-#   pixels contribute. Output feeds the heatmap in fig2.
+#   pixels contribute. Output feeds the heatmap in fig4.
 #
 # Input:
 #   NetCDF rasters: outputs/intermediate/max_spearman/max_correlation_kndvi_<v>.nc

@@ -116,7 +116,7 @@ fig <- ggplot(df_long, aes(x = month, y = percent, fill = correlation_class)) +
 
 ggsave(out_tif, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
        dpi = fig_dpi, bg = "white", device = "tiff", compression = "lzw")
-ggsave(out_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
-       dpi = fig_dpi, bg = "white", device = cairo_pdf)
+#ggsave(out_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
+#       dpi = fig_dpi, bg = "white", device = cairo_pdf)
 message("Supplementary Fig. S2 (FDR) saved to:\n  ", out_tif, "\n  ", out_pdf)
 cat("\n=== DONE ===\n")

@@ -38,8 +38,8 @@
 #   data/external/admin_equal_earth_clean.shp
 #
 # Output:
-#   outputs/figures/figS_shared_signed_coupling.tif
-#   outputs/figures/figS_shared_signed_coupling.pdf
+#   outputs/figures/figS3_shared_signed_coupling.tif
+#   outputs/figures/figS3_shared_signed_coupling.pdf
 #
 # Run from repo root (AFTER 03_variance_partitioning/02_apply_fdr.R):
 #   Rscript 05_figures/figS3.R
@@ -72,9 +72,9 @@ file_adj <- file.path("outputs", "varpart_global", "fdr_adjusted_pvalues.nc")
 file_world_equal_earth <- file.path("data", "external", "admin_equal_earth_clean.shp")
 
 out_file_tif <- if (exists("paths") && !is.null(paths$figures)) {
-  file.path(paths$figures, "figS_shared_signed_coupling.tif")
+  file.path(paths$figures, "figS3_shared_signed_coupling.tif")
 } else {
-  file.path("outputs", "figures", "figS_shared_signed_coupling.tif")
+  file.path("outputs", "figures", "figS3_shared_signed_coupling.tif")
 }
 out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)
@@ -306,8 +306,8 @@ fig <- map_grid / wrap_elements(cbar) +
 
 ggsave(out_file_tif, fig, width = fig_width_mm, height = fig_total_mm, units = "mm",
        dpi = fig_dpi, bg = "white", device = "tiff", compression = "lzw")
-ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_total_mm, units = "mm",
-       dpi = fig_dpi, bg = "white", device = cairo_pdf)
+#ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_total_mm, units = "mm",
+#       dpi = fig_dpi, bg = "white", device = cairo_pdf)
 
 message("\nFigure saved to:")
 message("  ", out_file_tif)

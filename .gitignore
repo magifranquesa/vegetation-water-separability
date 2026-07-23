@@ -8,14 +8,12 @@
 outputs/figures/
 !outputs/figures/.gitkeep
 
-# Tables: ignore generated tables, but keep the small figure-input summaries
-# shipped with the repository so the figures rebuild without recomputing them
-# (each needs large intermediate or accumulated fields to regenerate).
+# Tables: ship the small derived CSVs (figure inputs and reported-number tables)
+# so the figures and the numbers reproduce without recomputing; ignore any other
+# generated artefacts in this directory.
 outputs/tables/*
 !outputs/tables/.gitkeep
-!outputs/tables/supply_demand_coupling.csv
-!outputs/tables/spatial_correlations_rho_max.csv
-!outputs/tables/proportions_vegetated_fdr.csv
+!outputs/tables/*.csv
 
 # Intermediate outputs: ignore the contents but keep the directory skeleton, so
 # the Zenodo intermediate files (see README) can be dropped straight in. The

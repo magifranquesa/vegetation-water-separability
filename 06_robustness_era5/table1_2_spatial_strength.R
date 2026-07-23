@@ -40,7 +40,7 @@
 #   data/processed/aridity/ai_1982_2022_period.nc
 #
 # Outputs (refuse to overwrite):
-#   outputs/tables/robustness_T1_spatial_agreement_era5_v2.csv
+#   outputs/tables/robustness_T1_spatial_agreement_era5.csv
 #   outputs/tables/robustness_T2_strength_by_aridity_full.csv
 #   outputs/tables/robustness_T2_strength_by_aridity_comparison.csv
 #   outputs/tables/robustness_vegetated_area_by_aridity.csv
@@ -66,7 +66,7 @@ file_ai       <- file.path("data", "processed", "aridity", "ai_1982_2022_period.
 tables_dir <- if (exists("paths") && !is.null(paths$tables)) paths$tables else
   file.path("outputs", "tables")
 
-out_t1  <- file.path(tables_dir, "robustness_T1_spatial_agreement_era5_v2.csv")
+out_t1  <- file.path(tables_dir, "robustness_T1_spatial_agreement_era5.csv")
 out_t2f <- file.path(tables_dir, "robustness_T2_strength_by_aridity_full.csv")
 out_t2c <- file.path(tables_dir, "robustness_T2_strength_by_aridity_comparison.csv")
 out_veg <- file.path(tables_dir, "robustness_vegetated_area_by_aridity.csv")

@@ -139,12 +139,12 @@ compute_config <- function(cfg) {
   out
 }
 
-message("\n=== STRESS regime (figS3 equivalent) ===")
+message("\n=== STRESS regime ===")
 df_s <- compute_config(stress_config)
 write.csv(df_s, out_stress, row.names = FALSE)
 message("  wrote: ", out_stress)
 
-message("\n=== NON-STRESS regime (figS4 equivalent) ===")
+message("\n=== NON-STRESS regime ===")
 df_n <- compute_config(nonstress_config)
 write.csv(df_n, out_nonstr, row.names = FALSE)
 message("  wrote: ", out_nonstr)

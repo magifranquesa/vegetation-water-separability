@@ -303,6 +303,6 @@ fig <- map_grid / density_row + plot_layout(heights = c(5.15, 1.15)) &
 
 ggsave(out_file_tif, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
        dpi = fig_dpi, bg = "white", device = "tiff", compression = "lzw")
-ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
-       dpi = fig_dpi, bg = "white", device = cairo_pdf)
+#ggsave(out_file_pdf, fig, width = fig_width_mm, height = fig_height_mm, units = "mm",
+#       dpi = fig_dpi, bg = "white", device = cairo_pdf)
 message("Figure 1 (FDR) saved to:\n  ", out_file_tif, "\n  ", out_file_pdf)

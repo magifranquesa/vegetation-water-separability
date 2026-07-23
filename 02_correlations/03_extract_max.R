@@ -16,8 +16,8 @@
 #
 #   The resulting rasters are used downstream to compute spatial agreement
 #   between indicators (Spearman correlations between spatial maps; see
-#   03_summarise_results/summarise_spatial_correlations_rho_max.R) and to
-#   generate Figure 3 of the manuscript.
+#   04_analysis/07_spatial_agreement_rho_max.R) and to
+#   generate Figure 4 of the manuscript.
 #
 # Input:
 #   NetCDF files containing monthly Spearman correlations between kNDVI and
