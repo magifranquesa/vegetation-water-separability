@@ -34,10 +34,6 @@
 #     the subsequent running-sum accumulation (02_accumulate_gleam_fluxes.sh)
 #     operates on the same temporal coverage as the other variables.
 #
-# References:
-#   Miralles et al. (2014). El Niño-La Niña cycle and recent trends in
-#   continental evaporation. Nature Climate Change, 4, 122-126.
-#
 # Requirements:
 #   NCO >= 5.0   (https://nco.sourceforge.net)
 #

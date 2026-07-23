@@ -8,11 +8,14 @@
 outputs/figures/
 !outputs/figures/.gitkeep
 
-# Tables: ignore generated tables, but keep the supply-demand coupling summary
-# shipped with the repository (it needs the accumulated GLEAM fields to rebuild).
+# Tables: ignore generated tables, but keep the small figure-input summaries
+# shipped with the repository so the figures rebuild without recomputing them
+# (each needs large intermediate or accumulated fields to regenerate).
 outputs/tables/*
 !outputs/tables/.gitkeep
 !outputs/tables/supply_demand_coupling.csv
+!outputs/tables/spatial_correlations_rho_max.csv
+!outputs/tables/proportions_vegetated_fdr.csv
 
 # Intermediate outputs: ignore the contents but keep the directory skeleton, so
 # the Zenodo intermediate files (see README) can be dropped straight in. The
@@ -45,6 +48,9 @@ outputs/varpart_global/*
 !data/processed/aridity/ai_1982_2022_period.nc
 !data/processed/aridity/AI_1982_2022_Zomer_classes.tif
 !outputs/intermediate/vegetation_mask_c1.tif
+
+# ---- Editor / IDE ----
+.vscode/
 
 # ---- OS ----
 Thumbs.db

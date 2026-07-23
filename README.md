@@ -178,6 +178,13 @@ Rscript 04_analysis/09_timescale_bars.R
 Rscript 05_figures/fig1.R    # ... fig2.R fig3.R fig4.R fig5.R figS1.R figS2.R figS3.R figS4.R
 ```
 
+Fig. 4 and Supplementary Fig. S2 read small precomputed tables shipped in the
+repository (`outputs/tables/spatial_correlations_rho_max.csv` and
+`proportions_vegetated_fdr.csv`), so both render directly at step 3; to rebuild
+those tables from the archived correlations run
+`04_analysis/07_spatial_agreement_rho_max.R` and
+`04_analysis/08_vegetated_area_proportions_fdr.R` respectively.
+
 The Supplementary Tables reproduce from the same archived data after step 1:
 `table1_2_spatial_strength.R`, `table3_varpart_categories.R` and
 `table_water_controlled_area.R` in `06_robustness_era5/`. The two exceptions are

@@ -6,105 +6,59 @@
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
 # Supplementary Fig. S2: proportions of the vegetated land surface in the five
-# significance classes, using BH-FDR significance (p_adj < 0.05). Computes the
-# proportions and draws the stacked-bar figure.
+# significance classes, using BH-FDR significance (p_adj < 0.05). This script
+# only draws the figure; the proportions are computed once by
+# 04_analysis/08_vegetated_area_proportions_fdr.R and stored in the CSV below, so
+# the figure can be re-rendered (or its style tuned) without recomputing.
 #
 #   Classes (sum to 100% of the vegetated domain, area-weighted):
-#     Significant positive     rho* > 0 and p_adj < 0.05
+#     Significant positive     rho* > 0 and p_adj <  0.05
 #     Non-significant positive rho* > 0 and p_adj >= 0.05
 #     Non-significant negative rho* < 0 and p_adj >= 0.05
-#     Significant negative     rho* < 0 and p_adj < 0.05
+#     Significant negative     rho* < 0 and p_adj <  0.05
 #     Not observed             vegetated cell with no valid rho*
 #
-# Inputs (READ-ONLY):
-#   outputs/intermediate/absmax_spearman/abs_max_correlation_kndvi_{Ep,Et,ED,SMrz,SMs}.nc
-#   outputs/intermediate/absmax_fdr/fdr_padj_{Ep,Et,ED,SMrz,SMs}.tif
-#   outputs/intermediate/vegetation_mask_c1.tif
+# Input (READ-ONLY):
+#   outputs/tables/proportions_vegetated_fdr.csv
 #
 # Outputs:
-#   outputs/tables/proportions_vegetated_fdr.csv
 #   outputs/figures/figS2_significance_vegetated_proportions_bars_FDR.tif
 #   outputs/figures/figS2_significance_vegetated_proportions_bars_FDR.pdf
 #
-# Run from repo root (AFTER 02_correlations/04_fdr_significance_mask.R):
+# Run from repo root (AFTER 04_analysis/08_vegetated_area_proportions_fdr.R):
 #   Rscript 05_figures/figS2.R
 #
-# Dependencies: terra, ggplot2, dplyr, tidyr, grid
+# Dependencies: ggplot2, dplyr, tidyr, grid
 # ==============================================================================
 
 suppressPackageStartupMessages({
-  library(terra); library(ggplot2); library(dplyr); library(tidyr); library(grid)
+  library(ggplot2); library(dplyr); library(tidyr); library(grid)
 })
 
 config_file <- file.path("R", "config.R")
 if (file.exists(config_file)) source(config_file)
 
-dir_absmax <- if (exists("paths") && !is.null(paths$absmax_spearman)) paths$absmax_spearman else
-  file.path("outputs", "intermediate", "absmax_spearman")
-dir_fdr <- file.path("outputs", "intermediate", "absmax_fdr")
-file_veg_mask <- if (exists("paths") && !is.null(paths$veg_mask_c1)) paths$veg_mask_c1 else
-  file.path("outputs", "intermediate", "vegetation_mask_c1.tif")
 tables_dir  <- if (exists("paths") && !is.null(paths$tables))  paths$tables  else file.path("outputs", "tables")
 figures_dir <- if (exists("paths") && !is.null(paths$figures)) paths$figures else file.path("outputs", "figures")
+dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 
-out_csv <- file.path(tables_dir,  "proportions_vegetated_fdr.csv")
+in_csv  <- file.path(tables_dir,  "proportions_vegetated_fdr.csv")
 out_tif <- file.path(figures_dir, "figS2_significance_vegetated_proportions_bars_FDR.tif")
 out_pdf <- sub("\\.tif$", ".pdf", out_tif)
-for (f in c(out_csv, out_tif, out_pdf))
-  if (file.exists(f)) stop("REFUSING TO OVERWRITE: ", f, call. = FALSE)
 
-ALPHA <- 0.05
-indic_files <- c(Ep = "AED", Et = "Et", ED = "ED", SMrz = "SMrz", SMs = "SMs")
-fdrfile <- function(v) file.path(dir_fdr, sprintf("fdr_padj_%s.tif", v))
-ncfile  <- function(v) file.path(dir_absmax, sprintf("abs_max_correlation_kndvi_%s.nc", v))
+if (!file.exists(in_csv))
+  stop("Required input not found: ", in_csv,
+       "\nRun 04_analysis/08_vegetated_area_proportions_fdr.R first.", call. = FALSE)
 
-# ==============================================================================
-# Compute FDR proportions per indicator x month
-# ==============================================================================
+message("Loading proportions CSV...")
+df <- read.csv(in_csv, stringsAsFactors = FALSE)
 
-message("Setting up grid, area and vegetated mask...")
-r_ref <- rast(ncfile("Ep"), subds = "abs_max_correlation")[[1]]
-if (is.na(crs(r_ref)) || crs(r_ref) == "") crs(r_ref) <- "EPSG:4326"
-area_v <- as.vector(values(cellSize(r_ref, unit = "km", mask = FALSE)))
-veg <- as.vector(values(resample(rast(file_veg_mask), r_ref, method = "near")))
-veg <- !is.na(veg) & veg > 0
-veg_area <- sum(area_v[veg])
-veg_area_Mkm2 <- veg_area / 1e6
-
-month_levels <- month.name
-rows <- list()
-for (v in names(indic_files)) {
-  lab <- indic_files[[v]]
-  message(sprintf("=== %s (%s) ===", lab, v))
-  r_cor  <- rast(ncfile(v), subds = "abs_max_correlation")
-  r_padj <- rast(fdrfile(v))
-  for (m in 1:12) {
-    cor <- as.vector(values(r_cor[[m]]))
-    padj <- as.vector(values(r_padj[[m]]))
-    obs  <- veg & is.finite(cor)
-    sig  <- obs & is.finite(padj) & padj < ALPHA
-    a <- function(sel) sum(area_v[sel]) / veg_area
-    rows[[length(rows) + 1L]] <- data.frame(
-      variable = lab, month = month_levels[m], month_id = m,
-      sig_pos   = a(sig & cor > 0),
-      sig_neg   = a(sig & cor < 0),
-      nosig_pos = a(obs & !sig & cor > 0),
-      nosig_neg = a(obs & !sig & cor < 0),
-      not_observed = a(veg & !obs),
-      domain_area_mill_km2 = round(veg_area_Mkm2, 3),
-      stringsAsFactors = FALSE)
-  }
-}
-df <- do.call(rbind, rows)
-write.csv(df, out_csv, row.names = FALSE)
-message("CSV written: ", out_csv)
-
-# ==============================================================================
-# Plot (reproduces figS2 style)
-# ==============================================================================
+# ------------------------------------------------------------------------------
+# Plot
+# ------------------------------------------------------------------------------
 
 font_family <- "sans"
-fig_width_mm <- 180; fig_height_mm <- 95; fig_dpi <- 600
+fig_width_mm <- 180; fig_height_mm <- 75; fig_dpi <- 600
 base_font_size <- 6.0; axis_font_size <- 5.4; axis_title_size <- 6.0
 strip_font_size <- 6.8; legend_title_size <- 6.0; legend_text_size <- 5.8
 bar_label_size <- 2.1
