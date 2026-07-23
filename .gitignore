@@ -32,6 +32,12 @@ outputs/intermediate/max_spearman/*
 !outputs/intermediate/absmax_spearman_era5/README.md
 !outputs/intermediate/max_spearman/README.md
 
+# Ship the Fig. 1 density-plot sample cache so the figure reproduces bit-for-bit
+# (the sampling is not seeded; the frozen sample pins the published figure).
+!outputs/intermediate/fig1_cache/
+outputs/intermediate/fig1_cache/*
+!outputs/intermediate/fig1_cache/*.rds
+
 # Variance-partitioning outputs: same idea (the two Zenodo varpart NetCDFs go
 # here; the FDR-adjusted files are regenerated from them).
 outputs/varpart_global/*
