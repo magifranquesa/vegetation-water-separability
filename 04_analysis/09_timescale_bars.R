@@ -5,17 +5,14 @@
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
-# Recomputes the aridity x timescale bar TABLES (stress and non-stress regimes)
-# with BH-FDR significance (p_adj < 0.05) instead of the nominal
-# significance code. These tables drive the significance bars and mean-timescale
-# curves of Fig. 5 (a,b). Reproduces the timescale-bar aggregation,
-# changing ONLY the significance mask:
-#   nominal:  sig_mask = (abs_max_significance == +/-2)
-#   FDR:      sig_mask = (sign of rho* matches) & (fdr_padj < 0.05)
-# scale* (abs_max_scale) is unchanged; the SET of significant cells changes,
-# which shifts perc, sig_perc_total and hence the mean timescale.
+# Builds the aridity x timescale bar TABLES (stress and non-stress regimes) that
+# drive the significance bars and mean-timescale curves of Fig. 5 (a,b).
+# Significance uses BH-FDR (p_adj < 0.05): a cell counts as significant when the
+# sign of rho* matches the regime and fdr_padj < 0.05. scale* (abs_max_scale)
+# gives the timescale at which rho* occurs; the tables aggregate perc,
+# sig_perc_total and the mean timescale per aridity class.
 #
-# Writes new CSV tables.
+# Writes the CSV tables.
 #
 # Inputs (READ-ONLY):
 #   outputs/intermediate/absmax_spearman/abs_max_correlation_kndvi_{Ep,Et,ED,SMrz,SMs}.nc
@@ -96,7 +93,7 @@ veg_area_df <- bind_rows(lapply(1:5, function(cls)
 message("  veg class areas (Mkm2): ", paste(round(veg_area_df$veg_area_km2 / 1e6, 2), collapse = ", "))
 
 # ------------------------------------------------------------------------------
-# Core: recompute area summaries with FDR significance
+# Core: area summaries with FDR significance
 # ------------------------------------------------------------------------------
 
 compute_config <- function(cfg) {

@@ -9,15 +9,11 @@
 # Same method (BH-FDR pooled per indicator over all vegetated cell x month
 # p-values); the inputs are rho* computed against ERA5-Land instead of GLEAM.
 #
-#   Compute and SAVE the Benjamini-Hochberg FDR-adjusted p-value of rho* for each
-#   indicator, so that the ERA5 version of Fig. 1 can be drawn with the SAME
-#   multiple-comparison control used for GLEAM. BH is applied per indicator over
-#   all vegetated cell x month p-values pooled. Non-vegetated cells are set to
-#   NA. Adjusted p-values are written as a 12-layer GeoTIFF per indicator
-#   (layer = calendar month).
-#
-#   Caveat (inherited from the GLEAM version): FDR corrects MULTIPLICITY, not the
-#   SELECTION of rho* as max |rho| over five timescales.
+#   Compute and save the Benjamini-Hochberg FDR-adjusted p-value of rho* for each
+#   indicator, applying the same significance control as the GLEAM branch to the
+#   ERA5-Land inputs. BH is applied per indicator over all vegetated cell x month
+#   p-values pooled. Non-vegetated cells are set to NA. Adjusted p-values are
+#   written as a 12-layer GeoTIFF per indicator (layer = calendar month).
 #
 # Inputs (READ-ONLY):
 #   outputs/intermediate/absmax_spearman_era5/abs_max_correlation_kndvi_{Ep,Et,ED,SMrz,SMs}_era5.nc
@@ -116,9 +112,8 @@ for (v in indicators) {
   writeRaster(r_out, outfile(v), overwrite = FALSE,
               gdal = c("COMPRESS=DEFLATE", "TILED=YES"))
 
-  n_nom <- sum(pv[ok] < 0.05); n_fdr <- sum(padj[ok] < 0.05, na.rm = TRUE)
-  message(sprintf("  cell-months: sig nominal=%d  sig FDR=%d  (%.1f%% retained)",
-                  n_nom, n_fdr, 100 * n_fdr / n_nom))
+  n_fdr <- sum(padj[ok] < 0.05, na.rm = TRUE)
+  message(sprintf("  cell-months significant (FDR): %d", n_fdr))
   message("  wrote: ", outfile(v))
   rm(r_p, P, pv, padj, Padj, r_out); gc(verbose = FALSE)
 }

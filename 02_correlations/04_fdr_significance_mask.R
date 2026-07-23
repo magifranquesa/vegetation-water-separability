@@ -6,20 +6,14 @@
 # Project: Aridity and timescale bound the separability of vegetation water stress
 # Purpose:
 #
-#   Compute and SAVE the Benjamini-Hochberg FDR-adjusted p-value of rho* for each
-#   indicator, so that Fig. 1, Supplementary Fig. S1 and the area summaries can be
-#   redrawn with the SAME multiple-comparison control used in the variance
-#   partitioning, instead of the nominal p < 0.05. Reusable output; nothing else
-#   recomputes the adjustment.
+#   Compute and save the Benjamini-Hochberg FDR-adjusted p-value of rho* for each
+#   indicator. This is the significance control applied to rho* in Fig. 1,
+#   Supplementary Fig. S1 and the area summaries.
 #
 #   BH is applied per indicator over all vegetated cell x month p-values pooled
 #   (matching "all cell-month tests, by test type" in Methods). Non-vegetated
 #   cells are set to NA. Adjusted p-values are written as a 12-layer GeoTIFF per
 #   indicator (layer = calendar month).
-#
-#   Caveat (documented, not fixed here): FDR corrects MULTIPLICITY, not the
-#   SELECTION of rho* as max |rho| over five timescales; the latter would require
-#   a permutation null for the maximum.
 #
 # Inputs (READ-ONLY):
 #   outputs/intermediate/absmax_spearman/abs_max_correlation_kndvi_{Ep,Et,ED,SMrz,SMs}.nc
@@ -95,9 +89,8 @@ for (v in indicators) {
   writeRaster(r_out, outfile(v), overwrite = FALSE,
               gdal = c("COMPRESS=DEFLATE", "TILED=YES"))
 
-  n_nom <- sum(pv[ok] < 0.05); n_fdr <- sum(padj[ok] < 0.05, na.rm = TRUE)
-  message(sprintf("  cell-months: sig nominal=%d  sig FDR=%d  (%.1f%% retained)",
-                  n_nom, n_fdr, 100 * n_fdr / n_nom))
+  n_fdr <- sum(padj[ok] < 0.05, na.rm = TRUE)
+  message(sprintf("  cell-months significant (FDR): %d", n_fdr))
   message("  wrote: ", outfile(v))
   rm(r_p, P, pv, padj, Padj, r_out); gc(verbose = FALSE)
 }

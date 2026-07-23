@@ -196,9 +196,9 @@ if (need_Ep) {
     src$ep <- nc_open(F_ET0)
     message("AED source: FAO-56 ET0 (already mm/month).")
   } else {
-    stop("AED_SOURCE='pev' is no longer available: the ERA5-Land potential-evaporation ",
-         "file was deleted because it is biased high. Use AED_SOURCE='et0' and build the ",
-         "FAO-56 product first with 06_robustness_era5/et0/02_compute_et0.R.", call. = FALSE)
+    stop("AED_SOURCE='pev' is not supported: ERA5-Land potential evaporation is biased ",
+         "high. Use AED_SOURCE='et0' and build the FAO-56 product first with ",
+         "06_robustness_era5/et0/02_compute_et0.R.", call. = FALSE)
   }
 }
 if (need_E)  { stopifnot(file.exists(F_E));  src$e  <- nc_open(F_E) }

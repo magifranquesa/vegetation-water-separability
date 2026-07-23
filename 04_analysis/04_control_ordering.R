@@ -5,10 +5,10 @@
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
-# Purpose (NUMBERS ONLY — exploratory/defensive, not a paper figure):
+# Purpose (numbers only; not a main-text figure):
 #   Quantify the ORDERING / LOCATION of the dominant control along the aridity
-#   gradient, from the FDR dominance classification (same as 42_dominance_aridity
-#   _crosstab.R). Focus on the SOIL vs JOINT pair; AED reported separately.
+#   gradient, from the FDR dominance classification. Focus on the SOIL vs JOINT
+#   pair; AED reported separately.
 #
 #   *** Conceptual note: this is EXTENT / LOCATION of the dominant control by
 #   aridity, NOT correlation STRENGTH. It is a different metric from the aridity
@@ -23,7 +23,7 @@
 #   C) AED alone: its AI distribution (from A) and the aridity classes where its
 #      UNIQUE dominant control (code 3) concentrates.
 #
-#   Aridity classes + AI raster = Zomer (2022), identical to 42_* and Fig. b.
+#   Aridity classes + AI raster = Zomer (2022), same as Fig. b.
 #   Area-weighted by cellSize; pooled over the 12 months.
 #
 # Inputs (READ-ONLY; mtimes confirmed unchanged at the end):

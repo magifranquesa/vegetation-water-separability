@@ -5,7 +5,7 @@
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
-# Purpose (EXPLORATORY QC — read-only, fast):
+# Purpose (QC check — read-only, fast):
 #   Test empirically WHICH physical quantity lives in
 #   "Era5land_Evaporation from bare soil.nc" (GRIB paramId 228101).
 #

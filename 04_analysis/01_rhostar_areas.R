@@ -6,21 +6,17 @@
 # Project: Aridity and timescale bound the separability of vegetation water stress
 # Purpose:
 #
-#   Quantify how much the significant vegetation-hydroclimate correlation area
-#   changes when the same multiple-comparison control used in the variance
-#   partitioning (Benjamini-Hochberg FDR) is applied to rho*, relative to a
-#   nominal p < 0.05 threshold. Reports the area numbers; produces no figure.
-#
-#   Caveat (stated for honesty): FDR corrects for MULTIPLICITY across cells, not
-#   for the SELECTION of rho* as the max |rho| over five timescales. A permutation
-#   null for the max would additionally address that; this script does not.
+#   Quantify the significant vegetation-hydroclimate correlation area: the share
+#   of the vegetated domain where rho* is significant under BH-FDR (p_adj < 0.05),
+#   per indicator and calendar month, plus the union across indicators. Reports
+#   the area numbers; produces no figure.
 #
 #   FDR granularity: BH applied per indicator over all vegetated cell x month
 #   p-values pooled (matching "all cell-month tests, by test type" in Methods).
 #
 # Inputs (READ-ONLY):
 #   outputs/intermediate/absmax_spearman/abs_max_correlation_kndvi_{Ep,Et,ED,SMrz,SMs}.nc
-#     (variable abs_max_p_value; also abs_max_correlation, abs_max_significance)
+#     (variable abs_max_p_value)
 #   outputs/intermediate/vegetation_mask_c1.tif
 #
 # Output:
@@ -69,21 +65,20 @@ area_v <- as.vector(values(cellSize(r_ref, unit = "km", mask = FALSE)))
 msk <- rast(file_mask)
 veg <- as.vector(values(resample(msk, r_ref, method = "near")))
 veg <- !is.na(veg) & veg > 0
-veg_area_total <- sum(area_v[veg]) / 12 * 12   # per-month veg area (same every month)
-veg_area_Mkm2  <- sum(area_v[veg]) / 1e6
+veg_area_Mkm2 <- sum(area_v[veg]) / 1e6
 message(sprintf("  vegetated cells: %d   vegetated area: %.1f x 10^6 km^2",
                 sum(veg), veg_area_Mkm2))
 
 ncell <- length(area_v)
+vidx  <- which(veg)
 
-# union accumulators over indicators, per cell x month
-any_nom <- matrix(FALSE, nrow = ncell, ncol = 12)
+# union accumulator over indicators, per cell x month
 any_fdr <- matrix(FALSE, nrow = ncell, ncol = 12)
 
 rows <- list()
 
 # ------------------------------------------------------------------------------
-# Per indicator: nominal vs BH-FDR significant area (pooled cell x month)
+# Per indicator: BH-FDR significant area (pooled cell x month)
 # ------------------------------------------------------------------------------
 
 for (v in names(indicators)) {
@@ -95,39 +90,27 @@ for (v in names(indicators)) {
   rm(r_p); gc(verbose = FALSE)
 
   # restrict to vegetated cells; pool all months for this indicator's BH
-  vidx  <- which(veg)
   pv    <- as.vector(P[vidx, ])                                 # veg cells x 12 months
   ok    <- is.finite(pv)
   padj  <- rep(NA_real_, length(pv))
   padj[ok] <- p.adjust(pv[ok], method = "BH")
 
-  nom_flag <- is.finite(pv) & pv   < ALPHA
   fdr_flag <- is.finite(padj) & padj < ALPHA
-
-  # reshape back to [veg cell x month]
-  nom_mat <- matrix(nom_flag, nrow = length(vidx), ncol = 12)
-  fdr_mat <- matrix(fdr_flag, nrow = length(vidx), ncol = 12)
+  fdr_mat  <- matrix(fdr_flag, nrow = length(vidx), ncol = 12)
 
   for (m in 1:12) {
-    a_nom <- sum(area_v[vidx][nom_mat[, m]])
     a_fdr <- sum(area_v[vidx][fdr_mat[, m]])
     rows[[length(rows) + 1L]] <- data.frame(
       indicator = lab, month = months_names[m],
-      nom_area_Mkm2 = round(a_nom / 1e6, 2),
-      fdr_area_Mkm2 = round(a_fdr / 1e6, 2),
-      nom_pct = round(100 * a_nom / sum(area_v[veg]), 1),
-      fdr_pct = round(100 * a_fdr / sum(area_v[veg]), 1),
+      area_Mkm2 = round(a_fdr / 1e6, 2),
+      pct       = round(100 * a_fdr / sum(area_v[veg]), 1),
       stringsAsFactors = FALSE)
-    # accumulate union
-    any_nom[vidx[nom_mat[, m]], m] <- TRUE
     any_fdr[vidx[fdr_mat[, m]], m] <- TRUE
   }
-  # console summary: range across months
   sub <- do.call(rbind, rows); sub <- sub[sub$indicator == lab, ]
-  message(sprintf("  nominal %%veg: %.1f-%.1f   FDR %%veg: %.1f-%.1f   (shrink x%.2f at median)",
-                  min(sub$nom_pct), max(sub$nom_pct), min(sub$fdr_pct), max(sub$fdr_pct),
-                  median(sub$fdr_pct / sub$nom_pct)))
-  rm(P, pv, padj, nom_flag, fdr_flag, nom_mat, fdr_mat); gc(verbose = FALSE)
+  message(sprintf("  significant (FDR): %.1f-%.1f %% of vegetated area",
+                  min(sub$pct), max(sub$pct)))
+  rm(P, pv, padj, fdr_flag, fdr_mat); gc(verbose = FALSE)
 }
 
 # ------------------------------------------------------------------------------
@@ -136,14 +119,11 @@ for (v in names(indicators)) {
 
 message("\n=== UNION (significant with >=1 indicator) ===")
 for (m in 1:12) {
-  a_nom <- sum(area_v[any_nom[, m]])
   a_fdr <- sum(area_v[any_fdr[, m]])
   rows[[length(rows) + 1L]] <- data.frame(
     indicator = "ANY (>=1)", month = months_names[m],
-    nom_area_Mkm2 = round(a_nom / 1e6, 2),
-    fdr_area_Mkm2 = round(a_fdr / 1e6, 2),
-    nom_pct = round(100 * a_nom / sum(area_v[veg]), 1),
-    fdr_pct = round(100 * a_fdr / sum(area_v[veg]), 1),
+    area_Mkm2 = round(a_fdr / 1e6, 2),
+    pct       = round(100 * a_fdr / sum(area_v[veg]), 1),
     stringsAsFactors = FALSE)
 }
 
@@ -156,22 +136,16 @@ write.csv(res, out_csv, row.names = FALSE)
 
 u <- res[res$indicator == "ANY (>=1)", ]
 cat("\n================================================================\n")
-cat("=== rho* significant area, NOMINAL vs BH-FDR\n")
+cat("=== rho* significant area (BH-FDR)\n")
 cat("================================================================\n")
 cat(sprintf("  Vegetated domain: %.1f x 10^6 km^2\n\n", veg_area_Mkm2))
-cat("  UNION (>=1 indicator):\n")
-cat(sprintf("    NOMINAL : %.1f-%.1f%% of veg area (%.0f-%.0f x 10^6 km^2)\n",
-            min(u$nom_pct), max(u$nom_pct), min(u$nom_area_Mkm2), max(u$nom_area_Mkm2)))
-cat(sprintf("    FDR     : %.1f-%.1f%% of veg area (%.0f-%.0f x 10^6 km^2)\n",
-            min(u$fdr_pct), max(u$fdr_pct), min(u$fdr_area_Mkm2), max(u$fdr_area_Mkm2)))
+cat(sprintf("  UNION (>=1 indicator): %.1f-%.1f%% of veg area (%.0f-%.0f x 10^6 km^2)\n",
+            min(u$pct), max(u$pct), min(u$area_Mkm2), max(u$area_Mkm2)))
 
 cat("\n  Per indicator (range across months, %% of veg area):\n")
-cat(sprintf("    %-6s | %-14s | %-14s\n", "ind", "nominal", "FDR"))
-cat(sprintf("    %s\n", strrep("-", 42)))
 for (lab in indicators) {
   s <- res[res$indicator == lab, ]
-  cat(sprintf("    %-6s | %5.1f - %-6.1f | %5.1f - %-6.1f\n",
-              lab, min(s$nom_pct), max(s$nom_pct), min(s$fdr_pct), max(s$fdr_pct)))
+  cat(sprintf("    %-6s | %5.1f - %-6.1f\n", lab, min(s$pct), max(s$pct)))
 }
 
 cat(sprintf("\nCSV written: %s\n", out_csv))

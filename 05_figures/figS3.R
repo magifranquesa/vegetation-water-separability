@@ -22,7 +22,7 @@
 #       positive supply–demand co-variation); red = shared < 0 (compensatory,
 #       anticorrelated suppression); white ~ 0.
 #     - Symmetric limit = ±p98 of |shared| over signal cells, SAME for all 4
-#       panels (≈ ±0.37, as in the exploratory maps).
+#       panels (≈ ±0.37).
 #     - Integrated month labels, panel letters a–d.
 #     - Foot legend: diverging colourbar, "compensatory (shared < 0)" at the red
 #       end, "redundant (shared > 0)" at the blue end; title "Shared variance

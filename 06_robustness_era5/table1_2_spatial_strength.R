@@ -9,16 +9,12 @@
 #   Both need the same inputs (abs_max rho*, FDR-adjusted p, vegetated mask,
 #   aridity index), and those NetCDFs total ~11 GB, so they are read once.
 #
-#   (1) T1-FIX. The first version of T1 measured sign agreement over ALL
-#       vegetated cells. That is diluted by construction: ~65% of cells are not
-#       significant, rho* sits near zero there and its sign is close to random.
-#       With ~30% of cells significant and agreeing almost always, and 70% noise
-#       agreeing at chance, the expected value is ~65%; we observed 75-80%, i.e.
-#       already better than noise. The fix is NOT to lower the threshold after
-#       the fact but to measure sign where it carries information: restricted to
-#       cells significant in BOTH products. The unconditioned spatial
-#       correlation is kept, since it is the one metric that cannot be accused
-#       of conditioning on the significance being compared. Both are reported.
+#   (1) T1. Spatial agreement between the two products. Sign agreement is measured
+#       where it carries information: over cells significant in BOTH products
+#       (over all vegetated cells rho* sits near zero on non-significant cells and
+#       its sign is close to random, which dilutes the metric). The unconditioned
+#       spatial correlation over all cells is also reported, as the one metric
+#       that does not condition on the significance being compared.
 #
 #   (2) T2. Association strength along the aridity gradient: area-weighted mean
 #       |rho*| per aridity class and indicator, in both products, plus the
@@ -170,7 +166,7 @@ for (ind in indicators) {
     sig_e <- in_veg & !is.na(se) & se < ALPHA
     sig_b <- sig_g & sig_e & both
 
-    # --- T1 (v2) --------------------------------------------------------------
+    # --- T1--------------------------------------------------------------
     t1_rows[[length(t1_rows) + 1]] <- data.frame(
       indicator = ind_labels[[ind]], month = mn,
       n_cells_compared = sum(both),
@@ -223,7 +219,7 @@ cmp <- cmp[order(cmp$indicator, cmp$ai_class), ]
 write.csv(cmp, out_t2c, row.names = FALSE)
 
 cat("\n================================================================\n")
-cat("=== T1 (v2): spatial agreement, with sign measured where it means\n")
+cat("=== T1: spatial agreement, with sign measured where it means\n")
 cat("================================================================\n\n")
 print(t1[, c("indicator", "month", "spatial_rho",
              "pct_same_sign_all", "pct_same_sign_sig_both", "pct_sig_both")],

@@ -152,52 +152,6 @@ nc_close(nc_o)
 cat("  NetCDF written.\n")
 
 # ==============================================================================
-# STEP 3 — 5-category table, RAW vs FDR (pixel counts, exploratory)
-# ==============================================================================
-
-cat("\n================================================================\n")
-cat("=== STEP 3 — 5-category significance table: RAW vs FDR\n")
-cat("===   PRELIMINAR — pixel counts, no area weighting, NOT final\n")
-cat("================================================================\n\n")
-
-valid <- !is.na(total_r2)
-N     <- sum(valid)
-
-classify5 <- function(pf, ps, pd) {
-  full_sig <- valid & !is.na(pf) & pf < ALPHA
-  soil_sig <- !is.na(ps) & ps < ALPHA
-  dem_sig  <- !is.na(pd) & pd < ALPHA
-  out <- array(NA_character_, dim(valid))
-  out[valid & !full_sig]               <- "sin señal"
-  out[full_sig &  soil_sig & !dem_sig] <- "solo suelo"
-  out[full_sig & !soil_sig &  dem_sig] <- "solo demanda"
-  out[full_sig &  soil_sig &  dem_sig] <- "ambos sig"
-  out[full_sig & !soil_sig & !dem_sig] <- "acoplado puro"
-  out
-}
-
-CAT_ORDER <- c("sin señal", "solo suelo", "solo demanda", "ambos sig", "acoplado puro")
-cat_raw <- classify5(p_full,     p_soil,     p_demand)
-cat_fdr <- classify5(p_full_adj, p_soil_adj, p_demand_adj)
-
-t_raw <- table(factor(cat_raw[valid], levels = CAT_ORDER))
-t_fdr <- table(factor(cat_fdr[valid], levels = CAT_ORDER))
-
-cat(sprintf("  Valid cell×months: %d\n\n", N))
-cat(sprintf("  %-16s | %12s %8s | %12s %8s | %10s\n",
-            "Categoría", "n RAW", "% RAW", "n FDR", "% FDR", "Δ pp"))
-cat(sprintf("  %s\n", strrep("-", 78)))
-for (nm in CAT_ORDER) {
-  nr <- as.integer(t_raw[nm]); nf <- as.integer(t_fdr[nm])
-  pr <- nr / N * 100; pf <- nf / N * 100
-  cat(sprintf("  %-16s | %12d %7.2f%% | %12d %7.2f%% | %+9.2f\n",
-              nm, nr, pr, nf, pf, pf - pr))
-}
-cat(sprintf("  %s\n", strrep("-", 78)))
-cat(sprintf("  %-16s | %12d %7.2f%% | %12d %7.2f%% |\n",
-            "TOTAL", sum(t_raw), sum(t_raw)/N*100, sum(t_fdr), sum(t_fdr)/N*100))
-
-# ==============================================================================
 # File-protection confirmation
 # ==============================================================================
 
@@ -214,5 +168,5 @@ cat(sprintf("  Source UNCHANGED    : %s\n",
 cat("\n  Files CREATED by this script:\n")
 cat(sprintf("    %s\n", file_out))
 
-cat("\n=== DONE (Step 1 + Step 3) ===\n")
+cat("\n=== DONE (Step 1) ===\n")
 cat(">>> Next: run the figure scripts in 05_figures/.\n")

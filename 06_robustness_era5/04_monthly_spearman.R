@@ -21,7 +21,7 @@
 #   Calculations are performed row-wise as [lat, lon, month] for efficiency.
 #   Before writing, arrays are transposed to [lon, lat, month] so that the
 #   NetCDF output follows the same dimension order as the input datasets.
-#   This incorporates the dimension correction previously applied downstream.
+#   This applies the dimension correction inline.
 #
 # Significance codes:
 #    2  positive significant correlation (p <= alpha)
