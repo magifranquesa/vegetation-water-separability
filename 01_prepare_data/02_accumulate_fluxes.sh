@@ -7,7 +7,7 @@
 #
 # Purpose:
 #   Compute running sums of GLEAM v4.2a monthly flux variables (E, Ep, Et, ED)
-#   over accumulation windows of 1, 3, 6, 9, and 12 months.
+#   over accumulation timescales of 1, 3, 6, 9, and 12 months.
 #
 #   The running sum is implemented by inverting the time axis before applying
 #   cdo runsum and re-inverting afterward, so that each time step accumulates
@@ -20,7 +20,7 @@
 #   outputs/intermediate/concatenated/{var}_GLEAM_v4.2a_MO_1981-2022_NCO.nc
 #
 #   One file per variable (Ep, Et, ED), starting January 1981 so that
-#   accumulation windows are valid from January 1982 onward.
+#   accumulation timescales are valid from January 1982 onward.
 #   ED must be generated first by 01_compute_evaporation_deficit.sh.
 #
 # Output:

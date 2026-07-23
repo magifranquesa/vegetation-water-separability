@@ -7,11 +7,11 @@
 #          hydroclimatic indicators at multiple accumulation timescales.
 #
 # Description:
-#   For each hydroclimatic indicator, accumulation window, grid cell, and
+#   For each hydroclimatic indicator, timescale, grid cell, and
 #   calendar month, this script computes Spearman's rank correlation between
 #   monthly kNDVI and the corresponding hydroclimatic series over 1982–2022.
 #   Both series are linearly detrended before correlation. The script writes
-#   one NetCDF file per indicator and accumulation window, containing:
+#   one NetCDF file per indicator and timescale, containing:
 #     - correlation: signed Spearman correlation coefficient
 #     - significance: sign/significance code
 #     - p_value: Spearman correlation p-value
@@ -42,7 +42,7 @@
 #     atmospheric evaporative demand (AED).
 #   - `Et` is plant transpiration.
 #   - `ED` is evaporation deficit, computed upstream as E - AED for each
-#     accumulation window.
+#     timescale.
 #   - Total evaporation `E` is not analysed as an independent hydroclimatic
 #     indicator in the final manuscript and is therefore not included by default.
 #
@@ -97,7 +97,7 @@ hydro_var_tpl  <- if (exists("sources") && !is.null(sources$hydro)) sources$hydr
 # Use Ep for AED; Et for transpiration; ED for evaporation deficit.
 # indicators <- c("Ep", "Et", "ED", "SMrz", "SMs")
 indicators <- c("Ep")
-# Accumulation windows in months.
+# Accumulation timescales in months.
 scales <- c(3, 6, 9, 12)
 
 # Statistical settings.
@@ -285,7 +285,7 @@ for (indicator in indicators) {
   message("\nProcessing indicator: ", indicator)
   
   for (scale in scales) {
-    message("  Accumulation window: ", scale, " month(s)")
+    message("  Accumulation timescale: ", scale, " month(s)")
     
     fname          <- gsub("\\{scale\\}", scale,
                            gsub("\\{var\\}", indicator, hydro_file_tpl))

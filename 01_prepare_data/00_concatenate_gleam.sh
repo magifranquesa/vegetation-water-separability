@@ -8,7 +8,7 @@
 # Purpose:
 #   Concatenate annual GLEAM v4.2a NetCDF files into a single time series
 #   covering 1981-2022 for each hydroclimatic variable. The 1981 starting
-#   year is required so that accumulation windows (up to 12 months) are
+#   year is required so that accumulation timescales (up to 12 months) are
 #   valid from January 1982 onward.
 #
 #   The concatenation uses NCO (ncks + ncrcat). Each annual file must first

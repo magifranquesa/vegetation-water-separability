@@ -7,10 +7,10 @@
 #
 # Purpose:
 #   Extract, for each grid cell, calendar month, and hydroclimatic indicator,
-#   the Spearman correlation with the largest value across accumulation windows
+#   the Spearman correlation with the largest value across timescales
 #   (i.e. the most positive or least negative). Unlike rho* (computed in
 #   02_extract_absmax.R), which selects the scale with the largest absolute value, this
-#   quantity selects by signed value. The selected accumulation window is
+#   quantity selects by signed value. The selected timescale is
 #   stored alongside the correlation coefficient, its significance code, and
 #   its p-value.
 #
@@ -21,7 +21,7 @@
 #
 # Input:
 #   NetCDF files containing monthly Spearman correlations between kNDVI and
-#   each hydroclimatic indicator at individual accumulation windows:
+#   each hydroclimatic indicator at individual timescales:
 #
 #     spearman_correlation_kndvi_<indicator>_scale_<scale>.nc
 #
@@ -32,7 +32,7 @@
 #     SMrz : root-zone soil moisture
 #     SMs  : surface soil moisture
 #
-#   Expected accumulation windows:
+#   Expected accumulation timescales:
 #     1, 3, 6, 9, and 12 months
 #
 # Output:
@@ -44,14 +44,14 @@
 #     max_correlation   : Spearman correlation with the largest signed value across scales (most positive or least negative)
 #     max_significance  : significance code associated with selected scale
 #     max_p_value       : p-value associated with selected scale
-#     max_scale         : accumulation window at which max_correlation occurs
+#     max_scale         : accumulation timescale at which max_correlation occurs
 #
 # Notes:
 #   - This script selects the maximum positive correlation across accumulation
 #     windows using which.max(). It does NOT use absolute values.
-#   - In case of exact ties in rho across accumulation windows, which.max()
+#   - In case of exact ties in rho across timescales, which.max()
 #     returns the first occurrence; because the scales are ordered increasingly,
-#     the shortest tied accumulation window is selected.
+#     the shortest tied timescale is selected.
 #   - Total evaporation (E) is not processed here because it is used only to
 #     compute ED and is not analysed as an independent hydroclimatic indicator.
 #   - The output NetCDF files preserve the spatial dimension order used in the
@@ -310,7 +310,7 @@ for (indicator in indicator_list) {
     scale      <- scales[i]
     input_file <- file_template(scale)
 
-    message("  Reading accumulation window: ", scale, " months")
+    message("  Reading accumulation timescale: ", scale, " months")
 
     data <- read_correlation_file(input_file, expected_dims = dims)
 
@@ -334,11 +334,11 @@ for (indicator in indicator_list) {
     )
   }
 
-  # Select the maximum positive correlation across accumulation windows for
+  # Select the maximum positive correlation across accumulation timescales for
   # each grid cell and calendar month.
   #
   # In case of ties, which.max() returns the first occurrence, corresponding
-  # to the shortest accumulation window among tied rho values.
+  # to the shortest accumulation timescale among tied rho values.
   for (lon in seq_len(dims[1])) {
     if (lon %% 100 == 0) {
       message("  Processed longitude index ", lon, " / ", dims[1])

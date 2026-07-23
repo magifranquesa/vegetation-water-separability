@@ -194,7 +194,7 @@ local({
   message("Self-test passed: vectorised Spearman matches stats::cor to 1e-10.")
 })
 
-# One pass per accumulation window. AED is read ONCE per block and correlated
+# One pass per timescale. AED is read ONCE per block and correlated
 # against every supply variable, instead of re-reading it for each.
 for (k in SCALES) {
 

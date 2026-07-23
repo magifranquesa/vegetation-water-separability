@@ -7,7 +7,7 @@
 #
 # Purpose:
 #   Compute running means of GLEAM v4.2a monthly soil moisture variables
-#   (SMrz, SMs) over accumulation windows of 1, 3, 6, 9, and 12 months.
+#   (SMrz, SMs) over accumulation timescales of 1, 3, 6, 9, and 12 months.
 #
 #   Running means (not sums) are used for soil moisture because these
 #   variables represent storage states rather than fluxes.
@@ -23,7 +23,7 @@
 #   outputs/intermediate/concatenated/{var}_GLEAM_v4.2a_MO_1981-2022_NCO.nc
 #
 #   One file per variable (SMrz, SMs), starting January 1981 so that
-#   accumulation windows are valid from January 1982 onward.
+#   accumulation timescales are valid from January 1982 onward.
 #
 # Output:
 #   outputs/intermediate/accumulated/{var}_GLEAM_v4.2a_MO_1982-2022_scale_{s}.nc

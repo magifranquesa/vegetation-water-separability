@@ -8,13 +8,13 @@
 # Purpose:
 #   Extract, for each grid cell, calendar month, and hydroclimatic indicator, the
 #   Spearman correlation coefficient with the largest absolute magnitude across
-#   accumulation windows. The selected coefficient is retained with its original
+#   timescales. The selected coefficient is retained with its original
 #   sign and is referred to in the manuscript as rho* (ρ*). The corresponding
-#   accumulation window is stored as scale*.
+#   timescale is stored as scale*.
 #
 # Input:
 #   NetCDF files containing monthly Spearman correlations between kNDVI and each
-#   hydroclimatic indicator at individual accumulation windows:
+#   hydroclimatic indicator at individual timescales:
 #
 #     spearman_correlation_kndvi_<indicator>_scale_<scale>.nc
 #
@@ -25,7 +25,7 @@
 #     SMrz : root-zone soil moisture
 #     SMs  : surface soil moisture
 #
-#   Expected accumulation windows:
+#   Expected accumulation timescales:
 #     1, 3, 6, 9, and 12 months
 #
 # Output:
@@ -37,19 +37,19 @@
 #     abs_max_correlation   : signed Spearman correlation with largest |rho|
 #     abs_max_significance  : significance code associated with selected scale
 #     abs_max_p_value       : p-value associated with selected scale
-#     abs_max_scale         : accumulation window at which abs_max_correlation occurs
+#     abs_max_scale         : accumulation timescale at which abs_max_correlation occurs
 #
 # Notes:
 #   - rho* is selected as the correlation with the largest absolute magnitude
-#     across accumulation windows, while retaining its sign.
+#     across timescales, while retaining its sign.
 #   - rho* is not the maximum positive correlation. The maximum positive
 #     correlation (rho_max), used for the spatial agreement heatmap, is computed
 #     separately.
-#   - scale* stores the actual accumulation window in months, not the index of
+#   - scale* stores the actual timescale in months, not the index of
 #     the selected scale.
-#   - In case of exact ties in |rho| across accumulation windows, which.max()
+#   - In case of exact ties in |rho| across timescales, which.max()
 #     returns the first occurrence; because the scales are ordered increasingly,
-#     the shortest tied accumulation window is selected.
+#     the shortest tied timescale is selected.
 #   - The output NetCDF files preserve the spatial dimension order used in the
 #     correlation files: lon, lat, month.
 #   - Ep is used as the GLEAM variable representing AED.
@@ -313,12 +313,12 @@ for (indicator in indicator_list) {
   significance_list <- vector("list", n_scales)
   p_value_list <- vector("list", n_scales)
 
-  # Read all accumulation windows.
+  # Read all accumulation timescales.
   for (i in seq_along(scales)) {
     scale <- scales[i]
     input_file <- file_template(scale)
 
-    message("  Reading accumulation window: ", scale, " months")
+    message("  Reading accumulation timescale: ", scale, " months")
 
     data <- read_correlation_file(input_file, expected_dims = dims)
 
@@ -343,10 +343,10 @@ for (indicator in indicator_list) {
   }
 
   # Select the correlation with the largest absolute magnitude across
-  # accumulation windows for each grid cell and calendar month.
+  # accumulation timescales for each grid cell and calendar month.
   #
   # In case of ties, which.max() returns the first occurrence, corresponding to
-  # the shortest accumulation window among tied |rho| values.
+  # the shortest accumulation timescale among tied |rho| values.
   for (lon in seq_len(dims[1])) {
     if (lon %% 100 == 0) {
       message("  Processed longitude index ", lon, " / ", dims[1])

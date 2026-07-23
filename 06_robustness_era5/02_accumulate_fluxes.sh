@@ -8,7 +8,7 @@
 # Purpose:
 #   ERA5-Land counterpart of 02_accumulate_gleam_fluxes.sh, for the robustness
 #   replication. Computes running SUMS of the monthly flux indicators (Ep, Et, ED)
-#   over accumulation windows of 1, 3, 6, 9 and 12 months.
+#   over accumulation timescales of 1, 3, 6, 9 and 12 months.
 #
 #   The running sum is implemented by inverting the time axis before applying
 #   cdo runsum and re-inverting afterwards, so that each time step accumulates
