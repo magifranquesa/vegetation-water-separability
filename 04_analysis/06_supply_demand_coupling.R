@@ -47,6 +47,11 @@ suppressPackageStartupMessages({
 config_file <- file.path("R", "config.R")
 if (file.exists(config_file)) source(config_file)
 
+# ── Period window (see R/period.R) ───────────────────────────────────────────
+#   VWS_PERIOD=1982-2001 Rscript 04_analysis/06_supply_demand_coupling.R
+source(file.path("R", "period.R"))
+YR_IDX <- period_year_index()
+
 dir_acc <- if (exists("paths") && !is.null(paths$accumulated)) paths$accumulated else
   file.path("outputs", "intermediate", "accumulated")
 file_mask <- if (exists("paths") && !is.null(paths$veg_mask_c1)) paths$veg_mask_c1 else
@@ -56,11 +61,11 @@ file_ai <- if (exists("paths") && !is.null(paths$aridity_index)) paths$aridity_i
 tables_dir <- if (exists("paths") && !is.null(paths$tables)) paths$tables else
   file.path("outputs", "tables")
 
-dir_out <- file.path("outputs", "intermediate", "coupling")
+dir_out <- file.path("outputs", "intermediate", paste0("coupling", PERIOD_SFX))
 dir.create(dir_out,    recursive = TRUE, showWarnings = FALSE)
 dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
 
-out_csv <- file.path(tables_dir, "supply_demand_coupling.csv")
+out_csv <- file.path(tables_dir, paste0("supply_demand_coupling", PERIOD_SFX, ".csv"))
 if (file.exists(out_csv))
   stop("REFUSING TO OVERWRITE: ", out_csv, "\n  Delete/rename it manually.", call. = FALSE)
 
@@ -73,7 +78,7 @@ DEMAND   <- "Ep"                    # GLEAM potential evaporation == AED
 SUPPLIES <- c("SMrz", "SMs")        # root-zone (primary) and surface
 
 LAT_BLOCK <- 30                     # rows of latitude read at a time
-NYEAR     <- 41                     # 1982-2022
+NYEAR     <- 41                     # 1982-2022, full record on disk
 ALPHA     <- 0.05
 
 ai_breaks <- c(-Inf, 0.03, 0.20, 0.50, 0.65, Inf)
@@ -229,7 +234,9 @@ for (k in SCALES) {
       dim(As) <- c(nlon * nyb, ntim)
 
       for (m in 1:12) {
-        idx <- seq(m, by = 12, length.out = NYEAR)
+        # YR_IDX restricts to the current period window, so detrend_rows() below
+        # detrends within the window (see R/period.R).
+        idx <- seq(m, by = 12, length.out = NYEAR)[YR_IDX]
         Xs  <- As[, idx, drop = FALSE]
         Xd  <- Ad[, idx, drop = FALSE]
 

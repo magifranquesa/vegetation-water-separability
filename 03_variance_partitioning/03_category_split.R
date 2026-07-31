@@ -44,17 +44,24 @@ suppressPackageStartupMessages({
 config_file <- file.path("R", "config.R")
 if (file.exists(config_file)) source(config_file)
 
+# ── Period window (see R/period.R) ───────────────────────────────────────────
+# Must match the window used in 01_varpart.R and 02_apply_fdr.R:
+#   VWS_PERIOD=1982-2001 Rscript 03_variance_partitioning/03_category_split.R
+source(file.path("R", "period.R"))
+
 tables_dir <- if (exists("paths") && !is.null(paths$tables)) paths$tables else
   file.path("outputs", "tables")
 dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
 
-file_nc  <- file.path("outputs", "varpart_global", "varpart_signif_global_2blocks.nc")
-file_adj <- file.path("outputs", "varpart_global", "fdr_adjusted_pvalues.nc")
+file_nc  <- file.path("outputs", "varpart_global",
+                      paste0("varpart_signif_global_2blocks", PERIOD_SFX, ".nc"))
+file_adj <- file.path("outputs", "varpart_global",
+                      paste0("fdr_adjusted_pvalues", PERIOD_SFX, ".nc"))
 file_ai  <- if (exists("paths") && !is.null(paths$aridity_index)) paths$aridity_index else
   file.path("data", "processed", "aridity", "ai_1982_2022_period.nc")
 
-out_main <- file.path(tables_dir, "joint_split.csv")
-out_arid <- file.path(tables_dir, "joint_split_by_aridity.csv")
+out_main <- file.path(tables_dir, paste0("joint_split", PERIOD_SFX, ".csv"))
+out_arid <- file.path(tables_dir, paste0("joint_split_by_aridity", PERIOD_SFX, ".csv"))
 
 for (f in c(file_nc, file_adj, file_ai))
   if (!file.exists(f)) stop("Required input not found: ", f, call. = FALSE)
