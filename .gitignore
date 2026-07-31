@@ -60,3 +60,6 @@ outputs/varpart_global/*
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# ---- Generated Science-format figures (regenerate with 05_figures_science/) ----
+outputs/figures_science
