@@ -41,15 +41,8 @@
 
 suppressPackageStartupMessages(library(ncdf4))
 
-# ── Period window (see R/period.R) ───────────────────────────────────────────
-# Must match the window used in 01_varpart.R:
-#   VWS_PERIOD=1982-2001 Rscript 03_variance_partitioning/02_apply_fdr.R
-source(file.path("R", "period.R"))
-
-file_src <- file.path("outputs", "varpart_global",
-                      paste0("varpart_signif_global_2blocks", PERIOD_SFX, ".nc"))
-file_out <- file.path("outputs", "varpart_global",
-                      paste0("fdr_adjusted_pvalues", PERIOD_SFX, ".nc"))
+file_src <- file.path("outputs", "varpart_global", "varpart_signif_global_2blocks.nc")
+file_out <- file.path("outputs", "varpart_global", "fdr_adjusted_pvalues.nc")
 
 FV    <- -9999.0
 ALPHA <- 0.05
@@ -152,7 +145,6 @@ put_fv(nc_o, "p_demand_adj", p_demand_adj)
 ncatt_put(nc_o, 0, "title", "BH-FDR adjusted p-values for varpart_signif_global_2blocks")
 ncatt_put(nc_o, 0, "method", "p.adjust(method='BH'); pooled over all cells×months separately per test type")
 ncatt_put(nc_o, 0, "source", basename(file_src))
-ncatt_put(nc_o, 0, "period", period_label())
 ncatt_put(nc_o, 0, "note", "Adjusted p-values only. Source NetCDF NOT modified.")
 ncatt_put(nc_o, 0, "date_created", as.character(Sys.time()))
 ncatt_put(nc_o, 0, "created_by", "03_variance_partitioning/02_apply_fdr.R")

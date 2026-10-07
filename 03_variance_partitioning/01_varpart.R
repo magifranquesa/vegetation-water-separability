@@ -49,7 +49,7 @@ t_start <- proc.time()
 NPERM <- 999L       # raw p-value resolution = 1/(NPERM+1) = 0.001
 
 # ── Run mode ─────────────────────────────────────────────────────────────────
-TEST_MODE      <- TRUE       # FALSE → global run
+TEST_MODE      <- FALSE       # FALSE → global run
 TEST_LAT_RANGE <- c(-30, -20) # only used when TEST_MODE = TRUE
 
 N_CORES    <- 90L
@@ -60,13 +60,8 @@ BLOCKS      <- list(SUMINISTRO = c("SMs", "SMrz"), DEMANDA = "Ep")
 BLOCK_NAMES <- names(BLOCKS)
 N_TIME      <- 492L          # 1982–2022: 41 yr × 12 mo
 
+if (file.exists(file.path("R", "config.R")))            source(file.path("R", "config.R"))
 if (file.exists(file.path("R", "config.R"))) source(file.path("R", "config.R"))
-
-# ── Period window (see R/period.R) ───────────────────────────────────────────
-# Defaults to the full record. Restrict with, e.g.:
-#   VWS_PERIOD=1982-2001 Rscript 03_variance_partitioning/01_varpart.R
-source(file.path("R", "period.R"))
-YR_IDX <- period_year_index()      # years kept, indices into the year axis
 
 file_kndvi    <- if (exists("paths") && !is.null(paths$kndvi)) paths$kndvi else
   file.path("outputs", "intermediate", "kndvi", "kndvi.nc")
@@ -77,7 +72,7 @@ file_veg_mask <- if (exists("paths") && !is.null(paths$veg_mask_c1)) paths$veg_m
 file_tpl <- "{var}_GLEAM_v4.2a_MO_1982-2022_scale_{scale}.nc"
 
 # ── Output paths ────────────────────
-sfx         <- paste0(if (TEST_MODE) "_test" else "", PERIOD_SFX)
+sfx         <- if (TEST_MODE) "_test" else ""
 dir_stripes <- file.path("outputs", "varpart_global", paste0("stripes_signif", sfx))
 out_nc      <- file.path("outputs", "varpart_global",
                           paste0("varpart_signif_global_2blocks", sfx, ".nc"))
@@ -370,10 +365,7 @@ for (s in seq_along(stripe_starts)) {
         cnts <- c(skip_kndvi=0L, skip_vp=0L, skip_error=0L, const_drop=0L, success=0L)
 
         for (mo in 1:12) {
-          # YR_IDX restricts the series to the current period window. Because
-          # detrend_series() runs on this subset, the linear detrending is
-          # window-local, as required when comparing windows.
-          midx <- seq(mo, N_TIME, by = 12L)[YR_IDX]
+          midx <- seq(mo, N_TIME, by = 12L)
           y_dt <- detrend_series(kndvi_stripe[li, la, midx])
 
           if (sum(!is.na(y_dt)) < 10L) {
@@ -449,7 +441,7 @@ for (s in seq_along(stripe_starts)) {
       li_c     <- as.integer(r$li)
       la_loc_c <- as.integer(r$la) - la_s + 1L
       mo_c     <- as.integer(r$month)
-      midx_c   <- seq(mo_c, N_TIME, by = 12L)[YR_IDX]
+      midx_c   <- seq(mo_c, N_TIME, by = 12L)
 
       y_dt_c <- detrend_series(kndvi_stripe[li_c, la_loc_c, midx_c])
       bm_c   <- lapply(BLOCK_NAMES, function(bn)
@@ -633,10 +625,7 @@ for (v in VAR_NAMES) {
 ncatt_put(nc_out, 0, "title",
           "Global 2-block varpart + permutation tests: kNDVI ~ SUMINISTRO + DEMANDA")
 ncatt_put(nc_out, 0, "method",
-          paste0("vegan::varpart + anova.cca, Adj.R2, 1 PC/block, ",
-                 "window-local linear detrend, ", period_label()))
-ncatt_put(nc_out, 0, "period",   period_label())
-ncatt_put(nc_out, 0, "n_years",  as.integer(period_n_years()))
+          "vegan::varpart + anova.cca, Adj.R2, 1 PC/block, linear detrend, 1982-2022")
 ncatt_put(nc_out, 0, "blocks",
           "SUMINISTRO=SMs+SMrz, DEMANDA=Ep; 5 accumulation windows, GLEAM v4.2a")
 ncatt_put(nc_out, 0, "nperm",          as.integer(NPERM))
