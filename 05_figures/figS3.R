@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures_science/figS3_science.R
+# Script: 05_figures/figS3.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
@@ -38,11 +38,11 @@
 #   data/external/admin_equal_earth_clean.shp
 #
 # Output:
-#   outputs/figures_science/figS3_shared_signed_coupling_science.tif
+#   outputs/figures/figS3_shared_signed_coupling.tif
 #   (PDF output commented out)
 #
 # Run from repo root (AFTER 03_variance_partitioning/02_apply_fdr.R):
-#   Rscript 05_figures_science/figS3_science.R
+#   Rscript 05_figures/figS3.R
 #
 # Dependencies: terra, ggplot2, patchwork, sf, grid, scales
 # ==============================================================================
@@ -71,8 +71,8 @@ file_nc <- if (exists("paths") && !is.null(paths$varpart_signif)) {
 file_adj <- file.path("outputs", "varpart_global", "fdr_adjusted_pvalues.nc")
 file_world_equal_earth <- file.path("data", "external", "admin_equal_earth_clean.shp")
 
-out_file_tif <- file.path("outputs", "figures_science",
-                          "figS3_shared_signed_coupling_science.tif")
+out_file_tif <- file.path("outputs", "figures",
+                          "figS3_shared_signed_coupling.tif")
 # out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)   # PDF output disabled
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)
 

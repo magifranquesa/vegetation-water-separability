@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures_science/figS2_science.R
+# Script: 05_figures/figS2.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
@@ -22,11 +22,11 @@
 #   outputs/tables/proportions_vegetated_fdr.csv
 #
 # Outputs:
-#   outputs/figures_science/figS2_significance_vegetated_proportions_bars_FDR_science.tif
+#   outputs/figures/figS2_significance_vegetated_proportions_bars_FDR.tif
 #   (PDF output commented out)
 #
 # Run from repo root (AFTER 04_analysis/08_vegetated_area_proportions_fdr.R):
-#   Rscript 05_figures_science/figS2_science.R
+#   Rscript 05_figures/figS2.R
 #
 # Dependencies: ggplot2, dplyr, tidyr, grid
 # ==============================================================================
@@ -39,11 +39,11 @@ config_file <- file.path("R", "config.R")
 if (file.exists(config_file)) source(config_file)
 
 tables_dir  <- if (exists("paths") && !is.null(paths$tables))  paths$tables  else file.path("outputs", "tables")
-figures_dir <- file.path("outputs", "figures_science")
+figures_dir <- file.path("outputs", "figures")
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 
 in_csv  <- file.path(tables_dir,  "proportions_vegetated_fdr.csv")
-out_tif <- file.path(figures_dir, "figS2_significance_vegetated_proportions_bars_FDR_science.tif")
+out_tif <- file.path(figures_dir, "figS2_significance_vegetated_proportions_bars_FDR.tif")
 # out_pdf <- sub("\\.tif$", ".pdf", out_tif)   # PDF output disabled
 
 if (!file.exists(in_csv))

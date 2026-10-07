@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 # ==============================================================================
-# Script: 05_figures_science/figS5_science.R
+# Script: 05_figures/figS5.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
 # Purpose:
-#   Fig. S5 (Fig. S4 in the original numbering).
+#   Fig. S5.
 #   Two-panel supplementary map, arranged side by side (A | B), in Equal Earth
 #   projection:
 #
@@ -27,11 +27,11 @@
 #   ./outputs/intermediate/vegetation_mask_c1.tif
 #
 # Outputs:
-#   ./outputs/figures_science/figS5_vegetated_land_aridity_science.tif
+#   ./outputs/figures/figS5_vegetated_land_aridity.tif
 #   (PDF output commented out)
 #
 # Run from repo root or anywhere:
-#   Rscript 05_figures_science/figS5_science.R
+#   Rscript 05_figures/figS5.R
 #
 # Dependencies: terra, ggplot2, patchwork, sf, grid
 # ==============================================================================
@@ -68,8 +68,8 @@ file_veg_mask <- if (exists("paths") && !is.null(paths$veg_mask_c1)) {
   file.path(project_root, "outputs", "intermediate", "vegetation_mask_c1.tif")
 }
 
-out_file_tif <- file.path(project_root, "outputs", "figures_science",
-                          "figS5_vegetated_land_aridity_science.tif")
+out_file_tif <- file.path(project_root, "outputs", "figures",
+                          "figS5_vegetated_land_aridity.tif")
 # out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)   # PDF output disabled
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)
 
@@ -90,9 +90,9 @@ fig_dpi       <- 300
 panel_label_size_pt <- 8.0
 axis_text_size_pt   <- 5.8
 legend_title_pt     <- 5.8    # shrunk for half-column maps
-legend_text_pt      <- 5.2    # shrunk for half-column maps (>= 5 pt Nature min)
-annot_title_mm      <- 1.80   # geom_text units; approx. 5.1 pt (Nature >= 5 pt)
-annot_text_mm       <- 1.78   # geom_text units; approx. 5.1 pt (Nature >= 5 pt)
+legend_text_pt      <- 5.2    # shrunk for half-column maps (>= 5 pt)
+annot_title_mm      <- 1.80   # geom_text units; approx. 5.1 pt (>= 5 pt)
+annot_text_mm       <- 1.78   # geom_text units; approx. 5.1 pt (>= 5 pt)
 
 line_grid_mm  <- 0.12         # approx. 0.34 pt
 line_coast_mm <- 0.09         # approx. 0.25 pt

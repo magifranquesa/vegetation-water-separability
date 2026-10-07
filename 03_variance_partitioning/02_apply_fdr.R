@@ -169,4 +169,4 @@ cat("\n  Files CREATED by this script:\n")
 cat(sprintf("    %s\n", file_out))
 
 cat("\n=== DONE (Step 1) ===\n")
-cat(">>> Next: run the figure scripts in 05_figures_science/.\n")
+cat(">>> Next: run the figure scripts in 05_figures/.\n")

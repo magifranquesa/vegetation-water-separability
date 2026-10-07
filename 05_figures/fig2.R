@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures_science/fig2_science.R
+# Script: 05_figures/fig2.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
@@ -27,11 +27,11 @@
 #   data/external/admin_equal_earth_clean.shp
 #
 # Output:
-#   outputs/figures_science/fig2_dominance_split_5cat_science.tif
+#   outputs/figures/fig2_dominance_split_5cat.tif
 #   (PDF output commented out)
 #
 # Run from repo root (AFTER 03_variance_partitioning/02_apply_fdr.R):
-#   Rscript 05_figures_science/fig2_science.R
+#   Rscript 05_figures/fig2.R
 #
 # Dependencies: terra, ggplot2, patchwork, sf, grid, dplyr, tibble
 # ==============================================================================
@@ -49,8 +49,8 @@ file_nc <- if (exists("paths") && !is.null(paths$varpart_signif)) paths$varpart_
 file_adj <- file.path("outputs", "varpart_global", "fdr_adjusted_pvalues.nc")
 file_world_equal_earth <- file.path("data", "external", "admin_equal_earth_clean.shp")
 
-out_file_tif <- file.path("outputs", "figures_science",
-                          "fig2_dominance_split_5cat_science.tif")
+out_file_tif <- file.path("outputs", "figures",
+                          "fig2_dominance_split_5cat.tif")
 # out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)   # PDF output disabled
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)
 for (f in c(out_file_tif))

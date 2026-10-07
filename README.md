@@ -31,7 +31,7 @@ R/                        Shared configuration and helpers
 03_variance_partitioning/ Two-block variance partitioning + FDR + category split
 04_analysis/              Derived metrics: aridity stratification, supply-demand
                           coupling by timescale, spatial agreement, area summaries
-05_figures_science/       Figs. 1-4 and figs. S1-S5 (one script per figure)
+05_figures/               Figs. 1-4 and figs. S1-S5 (one script per figure)
 06_robustness_era5/       ERA5-Land replication (tables S1 to S4):
   et0/                    Atmospheric evaporative demand (FAO-56 Penman-Monteith)
   checks/                 Physical verification of ERA5-Land variables
@@ -42,19 +42,16 @@ data/
 outputs/                  Created when the pipeline runs (git-ignored)
 ```
 
-Each figure maps to one script in `05_figures_science/`; outputs are written to
-`outputs/figures_science/`:
+Each figure maps to one script in `05_figures/`; outputs are written to
+`outputs/figures/`:
 
 | Figure | Script | Figure | Script |
 |---|---|---|---|
-| Fig. 1 | `fig1_science.R` | fig. S1 | `figS1_science.R` |
-| Fig. 2 | `fig2_science.R` | fig. S2 | `figS2_science.R` |
-| Fig. 3 | `fig3_science.R` | fig. S3 | `figS3_science.R` |
-| Fig. 4 | `fig4_science.R` | fig. S4 | `figS4_science.R` |
-| | | fig. S5 | `figS5_science.R` |
-
-The figure scripts of an earlier submission, with a different figure numbering,
-are preserved under the git tag `nature-version`.
+| Fig. 1 | `fig1.R` | fig. S1 | `figS1.R` |
+| Fig. 2 | `fig2.R` | fig. S2 | `figS2.R` |
+| Fig. 3 | `fig3.R` | fig. S3 | `figS3.R` |
+| Fig. 4 | `fig4.R` | fig. S4 | `figS4.R` |
+| | | fig. S5 | `figS5.R` |
 
 ---
 
@@ -162,7 +159,7 @@ Rscript 03_variance_partitioning/03_category_split.R
 Rscript 04_analysis/01_rhostar_areas.R             # ... run 01-08 in order
 
 # 5. Figures
-Rscript 05_figures_science/fig1_science.R          # ... fig1-fig4, figS1-figS5
+Rscript 05_figures/fig1.R          # ... fig1-fig4, figS1-figS5
 ```
 
 The ERA5-Land robustness assessment (tables S1 to S4) is a parallel
@@ -187,7 +184,7 @@ Rscript 06_robustness_era5/08_apply_fdr.R               # ERA5  -> fdr_adjusted_
 Rscript 04_analysis/09_timescale_bars.R
 
 # 3. Figures, any order
-Rscript 05_figures_science/fig1_science.R    # ... fig2-fig4, figS1-figS5 (*_science.R)
+Rscript 05_figures/fig1.R    # ... fig2-fig4, figS1-figS5
 ```
 
 figs. S2 and S4 read small precomputed tables shipped in the
@@ -211,7 +208,7 @@ the raw data via stages 01 and 06.
 > and its ERA5 counterpart) runs a permutation test per grid cell and month over
 > the global vegetated domain and is designed for a multi-core machine.
 
-Outputs are written under `outputs/` (figures in `outputs/figures_science/`,
+Outputs are written under `outputs/` (figures in `outputs/figures/`,
 tables in `outputs/tables/`), which is git-ignored.
 
 ---

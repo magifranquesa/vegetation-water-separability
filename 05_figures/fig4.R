@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures_science/fig4_science.R
+# Script: 05_figures/fig4.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
-# Figure 4 (Fig. 5 in the original numbering): response timescales of
+# Figure 4: response timescales of
 # vegetation-hydroclimate associations by
 # aridity class, and supply-demand coupling as a function of accumulation
 # timescale. Panels a/b use BH-FDR significance for the timescale curves and the
@@ -23,11 +23,11 @@
 #   outputs/tables/supply_demand_coupling.csv          (panel c;   from 04_analysis/06_supply_demand_coupling.R)
 #
 # Output:
-#   outputs/figures_science/fig4_memory_coupling_combined_FDR_science.tif
+#   outputs/figures/fig4_memory_coupling_combined_FDR.tif
 #   (PDF output commented out)
 #
 # Run from repo root:
-#   Rscript 05_figures_science/fig4_science.R
+#   Rscript 05_figures/fig4.R
 #
 # Dependencies: dplyr, readr, ggplot2, patchwork, grid, scales, tibble
 # ==============================================================================
@@ -41,13 +41,13 @@ config_file <- file.path("R", "config.R")
 if (file.exists(config_file)) source(config_file)
 
 tables_dir  <- if (exists("paths") && !is.null(paths$tables))  paths$tables  else file.path("outputs", "tables")
-figures_dir <- file.path("outputs", "figures_science")
+figures_dir <- file.path("outputs", "figures")
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 
 f_stress   <- file.path(tables_dir, "timescale_bars_stress_fdr.csv")      # FDR version
 f_nonstr   <- file.path(tables_dir, "timescale_bars_nonstress_fdr.csv")   # FDR version
 f_coupling <- file.path(tables_dir, "supply_demand_coupling.csv")
-out_tif    <- file.path(figures_dir, "fig4_memory_coupling_combined_FDR_science.tif")
+out_tif    <- file.path(figures_dir, "fig4_memory_coupling_combined_FDR.tif")
 # out_pdf  <- sub("\\.tif$", ".pdf", out_tif)   # PDF output disabled
 
 for (f in c(f_stress, f_nonstr, f_coupling))
@@ -93,7 +93,7 @@ aridity_labels <- c("Arid" = "Arid", "Semi-arid" = "Semi-arid",
 
 bar_max_width <- 0.28; bar_h <- 0.32; y_bar_top <- 0.48; bar_x_offset <- 0.16
 
-# panel C specifics -- aridity-class colours taken from panel B of figS5_science.R
+# panel C specifics -- aridity-class colours taken from panel B of figS5.R
 # for cross-figure consistency.
 # (That ramp is designed for map fills; the pale mid-classes are anchored here
 #  with dark-bordered points so the lines remain legible.)

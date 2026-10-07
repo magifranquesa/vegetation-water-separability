@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures_science/fig3_science.R
+# Script: 05_figures/fig3.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
@@ -25,7 +25,7 @@
 #   outputs/intermediate/vegetation_mask_c1.tif
 #
 # Output:
-#   outputs/figures_science/fig3_plateau_transition_science.tif
+#   outputs/figures/fig3_plateau_transition.tif
 #   (PDF output commented out)
 # ==============================================================================
 
@@ -37,9 +37,9 @@ file_nc  <- file.path("outputs","varpart_global","varpart_signif_global_2blocks.
 file_adj <- file.path("outputs","varpart_global","fdr_adjusted_pvalues.nc")
 file_ai  <- if (exists("paths")&&!is.null(paths$aridity_index)) paths$aridity_index else file.path("data","processed","aridity","ai_1982_2022_period.nc")
 file_veg <- if (exists("paths")&&!is.null(paths$veg_mask_c1)) paths$veg_mask_c1 else file.path("outputs","intermediate","vegetation_mask_c1.tif")
-figures_dir <- file.path("outputs","figures_science")
+figures_dir <- file.path("outputs","figures")
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
-out_tif <- file.path(figures_dir,"fig3_plateau_transition_science.tif")
+out_tif <- file.path(figures_dir,"fig3_plateau_transition.tif")
 # out_pdf <- sub("\\.tif$", ".pdf", out_tif)   # PDF output disabled
 
 indicators <- c("Ep","Et","ED","SMrz","SMs"); ind_lab <- c(Ep="AED",Et="Et",ED="ED",SMrz="SMrz",SMs="SMs")

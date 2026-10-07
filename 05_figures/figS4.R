@@ -1,12 +1,12 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures_science/figS4_science.R
+# Script: 05_figures/figS4.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
-# Design: Nature-style, coherent with Fig. 1
+# Design: coherent with Fig. 1
 #
-# Fig. S4 (Fig. 4 in the original numbering): spatial agreement between the
+# Fig. S4: spatial agreement between the
 # rho_max maps across indicators.
 #   Heatmap of the Spearman correlation between the rho_max maps of every
 #   indicator pair, across calendar months, computed over vegetated grid cells.
@@ -17,7 +17,7 @@
 #   outputs/tables/spatial_correlations_rho_max.csv
 #
 # Output:
-#   outputs/figures_science/figS4_spatial_agreement_science.tif
+#   outputs/figures/figS4_spatial_agreement.tif
 #   (PDF output commented out)
 #
 # Dependencies: ggplot2, dplyr, readr, scico, grid
@@ -43,8 +43,8 @@ heatmap_csv <- if (exists("paths") && !is.null(paths$tables)) {
   file.path("outputs", "tables", "spatial_correlations_rho_max.csv")
 }
 
-out_file_tif <- file.path("outputs", "figures_science",
-                          "figS4_spatial_agreement_science.tif")
+out_file_tif <- file.path("outputs", "figures",
+                          "figS4_spatial_agreement.tif")
 # out_file_pdf <- sub("\\.tif$", ".pdf", out_file_tif)   # PDF output disabled
 dir.create(dirname(out_file_tif), recursive = TRUE, showWarnings = FALSE)
 
