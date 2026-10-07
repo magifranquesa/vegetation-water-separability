@@ -15,6 +15,12 @@ outputs/tables/*
 !outputs/tables/.gitkeep
 !outputs/tables/*.csv
 
+# ...except the provisional two-window comparison, which is exploratory work on
+# an unpublished question. The *.csv exception above would otherwise track it,
+# and git history is permanent: anything committed while the repository is
+# private becomes visible the day it is made public.
+outputs/tables/window_comparison_*.csv
+
 # Intermediate outputs: ignore the contents but keep the directory skeleton, so
 # the Zenodo intermediate files (see README) can be dropped straight in. The
 # *.nc / *.tif rules below keep the data files themselves out of the repository.
