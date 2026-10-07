@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures/figS2.R
+# Script: 05_figures_science/figS2_science.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
@@ -26,7 +26,7 @@
 #   (PDF output commented out)
 #
 # Run from repo root (AFTER 04_analysis/08_vegetated_area_proportions_fdr.R):
-#   Rscript 05_figures/figS2.R
+#   Rscript 05_figures_science/figS2_science.R
 #
 # Dependencies: ggplot2, dplyr, tidyr, grid
 # ==============================================================================

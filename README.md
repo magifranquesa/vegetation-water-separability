@@ -10,7 +10,7 @@ distinguished as controls on interannual vegetation activity, and shows that thi
 separability is bounded by aridity and by the timescale over which hydroclimatic
 conditions are integrated. This repository contains the full analysis pipeline —
 from raw data to every figure and table in the paper, including the ERA5-Land
-robustness assessment reported in the Supplementary Information.
+robustness assessment reported in the supplementary materials.
 
 ---
 
@@ -24,14 +24,15 @@ R/                        Shared configuration and helpers
 
 01_prepare_data/          Raw data -> analysis-ready fields
                           (concatenate GLEAM, evaporation deficit, accumulate to
-                          1-12 months, kNDVI, aridity index, vegetated mask)
+                          1, 3, 6, 9 and 12 months, kNDVI, aridity index,
+                          vegetated mask)
 02_correlations/          Monthly Spearman correlations (kNDVI vs indicators),
                           rho* and rho_max extraction, BH-FDR significance mask
 03_variance_partitioning/ Two-block variance partitioning + FDR + category split
 04_analysis/              Derived metrics: aridity stratification, supply-demand
                           coupling by timescale, spatial agreement, area summaries
-05_figures/               fig1-fig5 and figS1-figS4 (one script per figure)
-06_robustness_era5/       ERA5-Land replication (Supplementary Tables 1-4):
+05_figures_science/       Figs. 1-4 and figs. S1-S5 (one script per figure)
+06_robustness_era5/       ERA5-Land replication (tables S1 to S4):
   et0/                    Atmospheric evaporative demand (FAO-56 Penman-Monteith)
   checks/                 Physical verification of ERA5-Land variables
 
@@ -41,15 +42,19 @@ data/
 outputs/                  Created when the pipeline runs (git-ignored)
 ```
 
-Each figure maps to one script in `05_figures/`:
+Each figure maps to one script in `05_figures_science/`; outputs are written to
+`outputs/figures_science/`:
 
 | Figure | Script | Figure | Script |
 |---|---|---|---|
-| Fig. 1 | `fig1.R` | Fig. S1 | `figS1.R` |
-| Fig. 2 | `fig2.R` | Fig. S2 | `figS2.R` |
-| Fig. 3 | `fig3.R` | Fig. S3 | `figS3.R` |
-| Fig. 4 | `fig4.R` | Fig. S4 | `figS4.R` |
-| Fig. 5 | `fig5.R` | | |
+| Fig. 1 | `fig1_science.R` | fig. S1 | `figS1_science.R` |
+| Fig. 2 | `fig2_science.R` | fig. S2 | `figS2_science.R` |
+| Fig. 3 | `fig3_science.R` | fig. S3 | `figS3_science.R` |
+| Fig. 4 | `fig4_science.R` | fig. S4 | `figS4_science.R` |
+| | | fig. S5 | `figS5_science.R` |
+
+The figure scripts of an earlier submission, with a different figure numbering,
+are preserved under the git tag `nature-version`.
 
 ---
 
@@ -60,10 +65,17 @@ here (they are large and better obtained from source):
 
 | Dataset | Version | Source |
 |---|---|---|
-| GLEAM (soil moisture, evaporation, potential evaporation) | v4.2a | https://www.gleam.eu |
+| GLEAM (soil moisture, evaporation, potential evaporation) | v4.2a | Zenodo, https://doi.org/10.5281/zenodo.14724263 |
 | GIMMS NDVI3g+ | — | ORNL DAAC, https://doi.org/10.3334/ORNLDAAC/2187 |
 | CRU TS (precipitation, PET) | 4.09 | https://crudata.uea.ac.uk/cru/data/hrg/ |
 | ERA5-Land (robustness) | — | Muñoz-Sabater et al. (2021), *ESSD* 13, 4349-4383; Copernicus CDS |
+
+GLEAM v4.2a has been superseded by v4.3a on the GLEAM server; the version used
+here is permanently archived on Zenodo (link above). According to the GLEAM4.2
+README, the monthly product there is distributed as one file per variable
+covering the whole record; in that case `01_prepare_data/00_concatenate_gleam.sh`
+(which joins per-year files) is not needed, and the files only have to be
+restricted to 1981–2022.
 
 Precomputed intermediate outputs are archived on Zenodo:
 https://doi.org/10.5281/zenodo.20252053. Downloading them lets you skip the two
@@ -94,9 +106,9 @@ heavy steps, are needed on that path.
 Small derived files are shipped directly in the repository: the aridity index and
 Zomer classes and the map boundary shapefile under `data/`; the vegetated mask
 (`outputs/intermediate/vegetation_mask_c1.tif`); and the supply–demand coupling
-table (`outputs/tables/supply_demand_coupling.csv`), which drives Fig. 5c and
+table (`outputs/tables/supply_demand_coupling.csv`), which drives Fig. 4C and
 would otherwise need the large accumulated GLEAM fields to rebuild. The
-timescale-bar tables for Fig. 5a,b are not shipped: `04_analysis/09_timescale_bars.R`
+timescale-bar tables for Fig. 4A,B are not shipped: `04_analysis/09_timescale_bars.R`
 regenerates them from the archived rho* files.
 
 ---
@@ -150,10 +162,10 @@ Rscript 03_variance_partitioning/03_category_split.R
 Rscript 04_analysis/01_rhostar_areas.R             # ... run 01-08 in order
 
 # 5. Figures
-Rscript 05_figures/fig1.R                          # ... fig1-fig5, figS1-figS4
+Rscript 05_figures_science/fig1_science.R          # ... fig1-fig4, figS1-figS5
 ```
 
-The ERA5-Land robustness assessment (Supplementary Tables 1-4) is a parallel
+The ERA5-Land robustness assessment (tables S1 to S4) is a parallel
 track under `06_robustness_era5/`, run in numbered order after the ERA5-Land raw
 data have been obtained.
 
@@ -171,27 +183,27 @@ Rscript 03_variance_partitioning/03_category_split.R
 Rscript 06_robustness_era5/06_fdr_significance_mask.R   # ERA5  -> absmax_fdr_era5/
 Rscript 06_robustness_era5/08_apply_fdr.R               # ERA5  -> fdr_adjusted_pvalues_era5.nc
 
-# 2. Table that feeds Fig. 5a,b (reads the archived rho*)
+# 2. Table that feeds Fig. 4A,B (reads the archived rho*)
 Rscript 04_analysis/09_timescale_bars.R
 
 # 3. Figures, any order
-Rscript 05_figures/fig1.R    # ... fig2.R fig3.R fig4.R fig5.R figS1.R figS2.R figS3.R figS4.R
+Rscript 05_figures_science/fig1_science.R    # ... fig2-fig4, figS1-figS5 (*_science.R)
 ```
 
-Fig. 4 and Supplementary Fig. S2 read small precomputed tables shipped in the
-repository (`outputs/tables/spatial_correlations_rho_max.csv` and
-`proportions_vegetated_fdr.csv`), so both render directly at step 3; to rebuild
+figs. S2 and S4 read small precomputed tables shipped in the
+repository (`outputs/tables/proportions_vegetated_fdr.csv` and
+`spatial_correlations_rho_max.csv`), so both render directly at step 3; to rebuild
 those tables from the archived correlations run
-`04_analysis/07_spatial_agreement_rho_max.R` and
-`04_analysis/08_vegetated_area_proportions_fdr.R` respectively.
+`04_analysis/08_vegetated_area_proportions_fdr.R` and
+`04_analysis/07_spatial_agreement_rho_max.R` respectively.
 
-The Supplementary Tables reproduce from the same archived data after step 1:
+Tables S1 to S4 reproduce from the same archived data after step 1:
 `table1_2_spatial_strength.R`, `table3_varpart_categories.R` and
 `table_water_controlled_area.R` in `06_robustness_era5/`. The two exceptions are
 `04_analysis/06_supply_demand_coupling.R` (GLEAM) and `06_robustness_era5/table4_coupling.R`
-(ERA5, Supplementary Table 4): both need the raw accumulated fields, which are too
+(ERA5, table S4): both need the raw accumulated fields, which are too
 large to archive. The GLEAM coupling table they feed
-(`outputs/tables/supply_demand_coupling.csv`, Fig. 5c) is shipped in the
+(`outputs/tables/supply_demand_coupling.csv`, Fig. 4C) is shipped in the
 repository; the rest of that path requires rebuilding the accumulated fields from
 the raw data via stages 01 and 06.
 
@@ -199,8 +211,8 @@ the raw data via stages 01 and 06.
 > and its ERA5 counterpart) runs a permutation test per grid cell and month over
 > the global vegetated domain and is designed for a multi-core machine.
 
-Outputs are written under `outputs/` (figures in `outputs/figures/`, tables in
-`outputs/tables/`), which is git-ignored.
+Outputs are written under `outputs/` (figures in `outputs/figures_science/`,
+tables in `outputs/tables/`), which is git-ignored.
 
 ---
 

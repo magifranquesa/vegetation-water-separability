@@ -18,6 +18,12 @@
 # Input:
 #   Annual NC files downloaded from the GLEAM v4.2a FTP server:
 #     https://www.gleam.eu
+#   v4.2a has since been superseded there by v4.3a. The version used in this
+#   study is permanently archived on Zenodo:
+#     https://doi.org/10.5281/zenodo.14724263
+#   If the monthly files obtained from that archive already span the whole
+#   record (one file per variable), this script is not needed: restrict them
+#   to 1981-2022 instead (see README, "Data sources").
 #
 #   Expected filename pattern per variable:
 #     {var}_????_GLEAM_v4.2a_MO.nc   (one file per year)

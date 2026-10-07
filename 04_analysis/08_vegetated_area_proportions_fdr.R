@@ -36,7 +36,7 @@
 #            not_observed, domain_area_mill_km2
 #     (the five class columns are fractions of the vegetated domain, per month)
 #
-# Run from repo root (feeds 05_figures/figS2.R):
+# Run from repo root (feeds 05_figures_science/figS2_science.R):
 #   Rscript 04_analysis/08_vegetated_area_proportions_fdr.R
 #
 # Dependencies: terra

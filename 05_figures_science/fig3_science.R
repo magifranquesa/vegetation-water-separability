@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # ==============================================================================
-# Script: 05_figures/fig3.R
+# Script: 05_figures_science/fig3_science.R
 #
 # Project: Aridity and timescale bound the separability of vegetation water stress
 #
